@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="マケドニアの星（アルゲアス朝の象徴）">
+  <rect width="64" height="64" rx="12" fill="#5c1f1f"/>
+  <!-- 王朝の星（太陽の意匠・8方向の光線を二重に） -->
+  <g fill="#c8a23a">
+    <g id="rays">
+      <polygon points="32,8 35,30 29,30"/>
+      <polygon points="56,32 34,35 34,29"/>
+      <polygon points="32,56 29,34 35,34"/>
+      <polygon points="8,32 30,29 30,35"/>
+      <polygon points="49,15 36,31 33,28" transform="rotate(0 32 32)"/>
+    </g>
+    <use href="#rays" transform="rotate(45 32 32)"/>
+  </g>
+  <circle cx="32" cy="32" r="9" fill="#e8c96a"/>
+  <circle cx="32" cy="32" r="9" fill="none" stroke="#5c1f1f" stroke-width="1.5"/>
+</svg>

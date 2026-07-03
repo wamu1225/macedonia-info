@@ -1,0 +1,56 @@
+:root {
+  /* 王国の紫紅（porphyry）× 金 × 羊皮紙 */
+  --porphyry: #7a2e2a;
+  --porphyry-deep: #5c1f1f;
+  --porphyry-soft: #a85a4f;
+  --gold: #b8912f;
+  --gold-soft: #d0ad57;
+  --parchment: #f4efe4;
+  --paper-card: #fffdf8;
+  --ink: #2b2622;
+  --ink-soft: #6a5f54;
+  --line: #e2d9c8;
+  --tip-bg: #f1ece0;
+  --warn-bg: #f6ede1;
+  --info-bg: #f0ebdf;
+
+  --maxw: 780px;
+  --radius: 12px;
+  --font: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', Meiryo, 'Noto Sans JP', system-ui, sans-serif;
+  --font-serif: 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif;
+
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--parchment);
+  line-height: 1.85;
+  font-size: 16px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, svg { max-width: 100%; height: auto; }
+a { color: var(--porphyry); text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1, h2, h3 { line-height: 1.45; font-weight: 700; color: var(--porphyry-deep); }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--porphyry);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 0 0 8px 0;
+  z-index: 100;
+}
+.skip-link:focus { left: 0; }
+
+:focus-visible { outline: 3px solid var(--porphyry-soft); outline-offset: 2px; }
