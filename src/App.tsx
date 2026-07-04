@@ -182,6 +182,7 @@ function Header() {
           ))}
         </nav>
       </div>
+      <div className="meander" aria-hidden="true" />
     </header>
   );
 }
@@ -191,10 +192,12 @@ function TimelineHero() {
   return (
     <section className="timeline-hero" aria-label="マケドニアを貫く年表">
       <div className="timeline-hero-head">
+        <p className="timeline-hero-eyebrow">前7世紀 — 現代</p>
         <h1 className="timeline-hero-title">マケドニアを貫く一本の年表</h1>
         <p className="timeline-hero-sub">
           古代の王国から現代の北マケドニア共和国まで。「マケドニア」という名がたどった道すじを、一本の年表で一望します。
         </p>
+        <div className="rule-meander" role="presentation" />
       </div>
       <ol className="timeline">
         {TIMELINE.map((e, i) => (
