@@ -28,6 +28,7 @@ const REF = {
   liviusAegae: { label: 'Aegae (Vergina)', publisher: 'Livius.org', url: 'https://www.livius.org/articles/place/aegae-vergina/' },
   nato: { label: 'North Macedonia joins NATO（加盟式典の記録）', publisher: 'NATO', url: 'https://www.nato.int/cps/en/natohq/opinions_174650.htm' },
   factbook: { label: 'North Macedonia', publisher: 'CIA World Factbook', url: 'https://www.cia.gov/the-world-factbook/countries/north-macedonia/' },
+  britannicaFlag: { label: 'Flag of North Macedonia（ヴェルギナの星の国旗と1995年の変更）', publisher: 'Encyclopædia Britannica', url: 'https://www.britannica.com/topic/flag-of-North-Macedonia' },
 } as const;
 
 export const articles: Article[] = [
@@ -270,12 +271,20 @@ export const articles: Article[] = [
     description: '20世紀に独立した北マケドニア共和国の歩みと、ギリシャとのあいだで長く続いた国名をめぐる問題、それを解決したプレスパ合意までを整理します。国土や社会のあらましもあわせて示します。',
     icon: 'flag',
     lead: '20世紀、この地に一つの独立国が生まれた。しかし「マケドニア」という国名は、隣国ギリシャとのあいだに長い外交の問題を残した。',
-    toc: ['独立と国名問題', 'プレスパ合意と改称', '国土と社会'],
+    toc: ['独立と国名問題', '旗と象徴をめぐる対立', 'プレスパ合意と改称', '国土と社会'],
     content: `## 独立と国名問題
 
 第二次世界大戦後、マケドニアの地はユーゴスラビア連邦を構成する共和国の一つとなった。1991年に連邦が解体するなかで、この共和国は独立を宣言した。大きな武力衝突をともなわない、比較的おだやかな独立だったとされる。
 
 しかし新しい国が名乗った「マケドニア共和国」という国名は、ギリシャとの外交問題を引き起こした。ギリシャには同じ名を持つ地方があり、古代マケドニアの遺産をめぐる立場の違いもあって、両国は長く対立した。この対立は、外交の場だけでなく、北マケドニアが国際社会に加わっていくうえでも、長く足かせとなった。
+
+## 旗と象徴をめぐる対立
+
+対立は、国名だけにとどまらなかった。象徴をめぐっても両国はぶつかった。
+
+独立した共和国は、赤地に黄色い星をあしらった国旗を定めた。この星は、[ヴェルギナ](/macedonia-info/archaeology/)の王墓から見つかった納骨箱の意匠、アルゲアス朝の象徴とされる十六条の星（ヴェルギナの星）だった。ギリシャは、これを古代ギリシャ世界の文化遺産とみなしており、隣国がそれを国旗に用いることに強く反発した。
+
+この対立は、1995年9月に両国が結んだ暫定合意で動いた。合意により、共和国は国旗から十六条のヴェルギナの星を外し、ギリシャ側の領土に対する主張を持たないことを確認した。見返りにギリシャは経済封鎖を解いた。同年10月、赤地の国旗は改められ、現在の、様式化された太陽をあしらった旗になった。国名の問題そのものは残されたが、この暫定合意は、二十年あまり後のプレスパ合意による解決への一歩となった。
 
 ## プレスパ合意と改称
 
@@ -296,8 +305,8 @@ export const articles: Article[] = [
 
 💡 人口や民族の割合などの統計は、調査の年や資料によって変わる。最新の数値は、各国政府や国際機関の公表資料でご確認いただきたい。
 `,
-    updatedAt: '2026-07-08',
-    references: [REF.nato, REF.factbook],
+    updatedAt: '2026-07-14',
+    references: [REF.nato, REF.factbook, REF.britannicaFlag],
   },
 
   // ───────── 8. FAQ ─────────
