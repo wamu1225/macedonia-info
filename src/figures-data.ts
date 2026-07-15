@@ -83,12 +83,12 @@ function verginaSvg(): string {
     // 納骨箱（ラルナクス）
     `<rect x="74" y="102" width="28" height="16" rx="2" fill="${GOLD}"/>` +
     `<rect x="74" y="102" width="28" height="16" rx="2" fill="none" stroke="${DEEP}" stroke-width="1.2"/>` +
-    `<text x="88" y="136" font-size="9" fill="${INK}" text-anchor="middle">大墳丘の下の王墓と黄金の納骨箱</text>` +
+    `<text x="80" y="136" font-size="9" fill="${INK}" text-anchor="middle">王墓と黄金の納骨箱</text>` +
     // 星の意匠
     star +
     `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${GOLD_SOFT}"/>` +
     `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${DEEP}" stroke-width="1.2"/>` +
-    `<text x="${cx}" y="132" font-size="9" fill="${INK}" text-anchor="middle">アルゲアス朝の象徴とされる星</text>` +
+    `<text x="${cx}" y="132" font-size="9" fill="${INK}" text-anchor="middle">アルゲアス朝の星</text>` +
     `</svg>`
   );
 }
