@@ -24,6 +24,8 @@ const REF = {
   whePhilip: { label: 'Philip II of Macedon', publisher: 'World History Encyclopedia', url: 'https://www.worldhistory.org/Philip_II_of_Macedon/' },
   wheAlexander: { label: 'Alexander the Great', publisher: 'World History Encyclopedia', url: 'https://www.worldhistory.org/Alexander_the_Great/' },
   wheDiadochi: { label: 'Wars of the Diadochi', publisher: 'World History Encyclopedia', url: 'https://www.worldhistory.org/Wars_of_the_Diadochi/' },
+  wheSeleucid: { label: 'Seleucid Empire', publisher: 'World History Encyclopedia', url: 'https://www.worldhistory.org/Seleucid_Empire/' },
+  whePtolemaic: { label: 'Ptolemaic Dynasty', publisher: 'World History Encyclopedia', url: 'https://www.worldhistory.org/Ptolemaic_Dynasty/' },
   liviusAntigonus: { label: 'Antigonus II Gonatas', publisher: 'Livius.org', url: 'https://www.livius.org/articles/person/antigonus-ii-gonatas/' },
   liviusAegae: { label: 'Aegae (Vergina)', publisher: 'Livius.org', url: 'https://www.livius.org/articles/place/aegae-vergina/' },
   nato: { label: 'North Macedonia joins NATO（加盟式典の記録）', publisher: 'NATO', url: 'https://www.nato.int/cps/en/natohq/opinions_174650.htm' },
@@ -186,6 +188,8 @@ export const articles: Article[] = [
 
 これらの王国はそれぞれ数百年にわたって続き、地中海の東部から西アジアにかけての歴史を形づくった。ギリシャの文化と東方の文化がまじりあうヘレニズムの世界は、こうした複数の王国のもとで育っていった。
 
+その後の道すじは、王国ごとに違った。エジプトを治めた**プトレマイオス朝**は、首都アレクサンドリアを学問と交易の都として栄えさせ、三つのうちでもっとも長く続いた。しかし前31年のアクティウムの海戦に敗れ、最後の女王クレオパトラ7世の死とともに、前30年にローマのものとなった。西アジアに広がった**セレウコス朝**は、最盛期には地中海からインダス川の流域にまでおよぶ広さを持ったが、しだいに領土を失い、前63年にローマの将軍ポンペイウスがシリアを併合して滅びた。マケドニアの**アンティゴノス朝**も、のちに述べるようにローマに敗れる。こうして、アレクサンドロスの帝国から分かれた三つの王国は、いずれも最後はローマに飲み込まれていった。
+
 ## アンティゴノス朝の確立
 
 争いのなかから、マケドニアには**アンティゴノス朝**が生まれた。アンティゴノス1世の孫にあたるアンティゴノス2世ゴナタスは、紀元前277年、侵入してきたガラティア人をリュシマキアの近くで撃退し、マケドニア王となった。彼の治世は前283年から前239年におよび、王朝はここに安定した基盤を得た。
@@ -198,8 +202,8 @@ export const articles: Article[] = [
 
 ただし、王国が生んだギリシャ語とヘレニズムの文化は、ローマの支配のもとでも東地中海に長く生きつづけた。政治の枠組みが変わっても、言葉や学問の流れはただちには途切れなかった。
 `,
-    updatedAt: '2026-07-08',
-    references: [REF.wheDiadochi, REF.liviusAntigonus, REF.whe],
+    updatedAt: '2026-07-18',
+    references: [REF.wheDiadochi, REF.whePtolemaic, REF.wheSeleucid, REF.liviusAntigonus, REF.whe],
   },
 
   // ───────── 5. 考古学（ヴェルギナとペラ） ─────────
