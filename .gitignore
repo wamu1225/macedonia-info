@@ -43,3 +43,6 @@ scripts/quality_*
 scripts/check_*
 test-results/
 playwright-report/
+
+# ③改善ループのローカル専用ドキュメント
+docs/ROADMAP.md
