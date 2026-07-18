@@ -10,6 +10,7 @@ const GOLD = '#b8912f';
 const GOLD_SOFT = '#d7b968';
 const INK = '#2b2622';
 const STONE = '#cabfa6';
+const SEA = '#aec6cf';
 
 // 1) サリサとファランクス（長槍の密集隊形）
 function phalanxSvg(): string {
@@ -36,28 +37,52 @@ function phalanxSvg(): string {
   );
 }
 
-// 2) 東方遠征の道すじ（地理ではなく順路の模式図）
+// 2) 東方遠征の模式地図（2D配置・正確な地理ではない）。西→東の広がりと、南のエジプトへの
+//    迂回、メソポタミアへの転進を大づかみに示し、決戦4つ（B1a）を◆で重ねる。
 function campaignSvg(): string {
-  const stops: { x: number; label: string }[] = [
-    { x: 24, label: 'マケドニア' },
-    { x: 96, label: '小アジア' },
-    { x: 160, label: 'エジプト' },
-    { x: 220, label: 'ペルシア' },
-    { x: 280, label: 'インダス川' },
+  type P = { x: number; y: number; label: string; kind: 'battle' | 'city'; year?: string; up?: boolean; anchor?: string };
+  // 進軍の順に並べる（この順でルート線を引く）
+  const pts: P[] = [
+    { x: 34,  y: 44,  label: 'ペラ',        kind: 'city',   up: true },
+    { x: 82,  y: 50,  label: 'グラニコス',   kind: 'battle', year: '前334', up: true },
+    { x: 128, y: 78,  label: 'イッソス',     kind: 'battle', year: '前333', up: false },
+    { x: 96,  y: 150, label: 'エジプト',     kind: 'city',   up: false },
+    { x: 176, y: 92,  label: 'ガウガメラ',   kind: 'battle', year: '前331', up: true },
+    { x: 196, y: 120, label: 'バビロン',     kind: 'city',   up: false },
+    { x: 300, y: 96,  label: 'ヒュダスペス',  kind: 'battle', year: '前326', up: true, anchor: 'end' },
   ];
-  const y = 66;
-  let dots = '';
-  stops.forEach((s, i) => {
-    dots += `<circle cx="${s.x}" cy="${y}" r="5.5" fill="${PORPHYRY}"/>`;
-    dots += `<text x="${s.x}" y="${i % 2 === 0 ? y - 14 : y + 22}" font-size="9" fill="${INK}" text-anchor="middle">${s.label}</text>`;
-  });
+  const route = pts.map((p) => `${p.x},${p.y}`).join(' ');
+  let marks = '';
+  for (const p of pts) {
+    if (p.kind === 'battle') {
+      // ◆（決戦の地）
+      marks += `<path d="M${p.x} ${p.y - 6} L${p.x + 6} ${p.y} L${p.x} ${p.y + 6} L${p.x - 6} ${p.y} Z" fill="${PORPHYRY}" stroke="${GOLD}" stroke-width="1.2"/>`;
+    } else {
+      marks += `<circle cx="${p.x}" cy="${p.y}" r="4" fill="${INK}"/>`;
+    }
+    const anchor = p.anchor || 'middle';
+    const lx = anchor === 'end' ? p.x + 6 : p.x;
+    const ly = p.up ? p.y - 11 : p.y + 17;
+    marks += `<text x="${lx}" y="${ly}" font-size="9" fill="${INK}" text-anchor="${anchor}" font-weight="600">${p.label}</text>`;
+    if (p.year) marks += `<text x="${lx}" y="${p.up ? p.y - 22 : p.y + 28}" font-size="7.5" fill="${DEEP}" text-anchor="${anchor}">${p.year}</text>`;
+  }
   return (
-    `<svg class="diagram-single" viewBox="0 0 300 110" width="100%" role="img" aria-label="アレクサンドロス大王の東方遠征の順路をたどる模式図">` +
-    `<rect width="300" height="110" fill="${BG}"/>` +
-    `<line x1="24" y1="${y}" x2="280" y2="${y}" stroke="${GOLD}" stroke-width="2.4"/>` +
-    `<path d="M274 ${y - 5} l8 5 l-8 5" fill="none" stroke="${GOLD}" stroke-width="2.4"/>` +
-    dots +
-    `<text x="150" y="102" font-size="9" fill="${DEEP}" text-anchor="middle">西のマケドニアから東のインダス川へ（順路の模式図・地理は正確ではない）</text>` +
+    `<svg class="diagram-single" viewBox="0 0 320 200" width="100%" role="img" aria-label="アレクサンドロス大王の東方遠征の道すじと四つの決戦（グラニコス・イッソス・ガウガメラ・ヒュダスペス）を示す模式地図">` +
+    `<rect width="320" height="200" fill="${BG}"/>` +
+    // 地中海（左上のおおまかな海域）
+    `<path d="M0 20 Q70 30 110 44 Q140 55 120 74 Q80 96 30 86 Q8 82 0 96 Z" fill="${SEA}" opacity="0.55"/>` +
+    `<text x="40" y="60" font-size="8.5" fill="#3c5560" text-anchor="middle" font-style="italic">地中海</text>` +
+    // 遠征ルート
+    `<polyline points="${route}" fill="none" stroke="${GOLD}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>` +
+    // ルート終端の矢じり（ヒュダスペス手前）
+    `<path d="M292 90 l10 6 l-11 5" fill="none" stroke="${GOLD}" stroke-width="2.4" stroke-linejoin="round"/>` +
+    marks +
+    // 凡例
+    `<path d="M18 176 l5 -5 l5 5 l-5 5 Z" fill="${PORPHYRY}" stroke="${GOLD}" stroke-width="1"/>` +
+    `<text x="30" y="179" font-size="8" fill="${INK}">決戦</text>` +
+    `<circle cx="70" cy="176" r="3.5" fill="${INK}"/>` +
+    `<text x="78" y="179" font-size="8" fill="${INK}">おもな都市</text>` +
+    `<text x="316" y="192" font-size="7.5" fill="${DEEP}" text-anchor="end" font-style="italic">配置は模式・正確な地理ではない</text>` +
     `</svg>`
   );
 }
@@ -99,7 +124,7 @@ const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
     inner: `<div class="diagram-wrap">${phalanxSvg()}</div>`,
   },
   'campaign': {
-    caption: '東方遠征の順路の模式図。アレクサンドロスは西のマケドニアから小アジア、エジプトを経てアケメネス朝ペルシアを滅ぼし、東のインダス川の流域にまで達した。図は順序を示すもので、地理や経路は正確ではない。',
+    caption: '東方遠征の道すじと四つの決戦の模式地図。西のマケドニア（ペラ）を発ち、グラニコス・イッソスで勝ち、南のエジプトへ回ったのち、ガウガメラでアケメネス朝を破り、東のヒュダスペス（インダス川の支流）にまで達した。◆が決戦の地、●がおもな都市を表す。配置は大づかみの模式で、正確な地理ではない。',
     inner: `<div class="diagram-wrap">${campaignSvg()}</div>`,
   },
   'vergina': {
