@@ -77,7 +77,7 @@ function campaignSvg(): string {
   const pts: P[] = [
     { lon: 22.5, lat: 40.8, label: 'ペラ',            kind: 'city',   ldx: -7, ldy: -9, anchor: 'end' },
     { lon: 27.3, lat: 40.2, label: 'グラニコス',       kind: 'battle', year: '前334', ldx: 7, ldy: -9, anchor: 'start' },
-    { lon: 36.2, lat: 36.9, label: 'イッソス',         kind: 'battle', year: '前333', ldx: 8, ldy: 4, anchor: 'start' },
+    { lon: 36.2, lat: 36.9, label: 'イッソス',         kind: 'battle', year: '前333', ldx: -9, ldy: 5, anchor: 'end' },
     { lon: 29.9, lat: 31.2, label: 'アレクサンドリア',  kind: 'city',   ldx: 0, ldy: 17, anchor: 'middle' },
     { lon: 43.4, lat: 36.4, label: 'ガウガメラ',       kind: 'battle', year: '前331', ldx: 0, ldy: -11, anchor: 'middle' },
     { lon: 44.4, lat: 32.5, label: 'バビロン',         kind: 'city',   ldx: -6, ldy: 16, anchor: 'end' },
@@ -114,18 +114,21 @@ function campaignSvg(): string {
 
 // 3) ヘレニズム三王国の勢力範囲（実座標に基づく・北が上）。色分けで王朝を示す。
 function kingdomsSvg(): string {
-  // 各王朝の中心をおおよその実座標（経度緯度）で置き、勢力の広がりを楕円で表す。
-  type R = { lon: number; lat: number; rx: number; ry: number; rot: number; color: string; terr: string };
+  // 各王朝の勢力範囲を、実海岸線でクリップした領域として塗る（楕円をやめ、海にはみ出さず陸地に沿わせる）。
+  const clipDef = `<defs><clipPath id="hk-land"><path d="${LAND_PATH}"/></clipPath></defs>`;
+  type R = { color: string; terr: string; llon: number; llat: number; anchor: string; poly: [number, number][] };
   const regions: R[] = [
-    { lon: 47, lat: 34, rx: 74, ry: 40, rot: 0, color: OLIVE, terr: '西アジア' },       // セレウコス朝（シリア〜メソポタミア〜ペルシア）
-    { lon: 30.5, lat: 27.5, rx: 26, ry: 30, rot: 0, color: GOLD, terr: 'エジプト' },     // プトレマイオス朝
-    { lon: 22.5, lat: 40, rx: 22, ry: 17, rot: 0, color: PORPHYRY, terr: 'マケドニア' }, // アンティゴノス朝
+    { color: OLIVE, terr: '西アジア', llon: 53, llat: 35.5, anchor: 'middle', poly: [[35, 41.8], [78, 41.8], [78, 28], [49, 28], [40, 32], [35, 35.5]] },       // セレウコス朝（シリア〜メソポタミア〜ペルシア〜東方）
+    { color: GOLD, terr: 'エジプト', llon: 30, llat: 27, anchor: 'middle', poly: [[24.5, 32], [35, 32], [35, 29], [34, 24], [30, 22], [25, 22.5], [24.5, 28]] }, // プトレマイオス朝（エジプト〜南レバント沿岸）
+    { color: PORPHYRY, terr: 'マケドニア', llon: 20.4, llat: 38.6, anchor: 'start', poly: [[18.8, 41.8], [25, 41.8], [25, 36], [18.8, 36]] },                    // アンティゴノス朝（マケドニア〜ギリシア）
   ];
   let shapes = '';
   for (const r of regions) {
-    const cx = px(r.lon), cy = py(r.lat);
-    shapes += `<ellipse cx="${cx}" cy="${cy}" rx="${r.rx}" ry="${r.ry}" fill="${r.color}" fill-opacity="0.26" stroke="${r.color}" stroke-width="2"/>`;
-    shapes += `<text x="${cx}" y="${cy + 4}" font-size="10" fill="${INK}" text-anchor="middle" font-weight="700">${r.terr}</text>`;
+    const poly = r.poly.map(([lo, la]) => `${px(lo)},${py(la)}`).join(' ');
+    shapes += `<polygon points="${poly}" fill="${r.color}" fill-opacity="0.5" clip-path="url(#hk-land)"/>`;
+  }
+  for (const r of regions) {
+    shapes += `<text x="${px(r.llon)}" y="${py(r.llat)}" font-size="10" fill="${INK}" text-anchor="${r.anchor}" font-weight="700" paint-order="stroke" stroke="${BG}" stroke-width="2.8">${r.terr}</text>`;
   }
   const legend: { color: string; name: string }[] = [
     { color: PORPHYRY, name: 'アンティゴノス朝' },
@@ -142,6 +145,7 @@ function kingdomsSvg(): string {
   }
   return (
     `<svg class="diagram-single" viewBox="0 0 ${MAP_W} ${MAP_H + 12}" width="100%" role="img" aria-label="ディアドコイの争いののちに分かれたヘレニズム三王国（アンティゴノス朝・プトレマイオス朝・セレウコス朝）の勢力範囲を、北を上にした地図上に色分けして示す">` +
+    clipDef +
     baseMap() +
     shapes +
     `<g transform="translate(0 12)">${leg}</g>` +
