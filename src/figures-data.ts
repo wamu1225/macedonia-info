@@ -4,6 +4,7 @@
 // 地図は実海岸線（Natural Earth 50m）に基づき、北を上にした正距円筒図法で描く。
 
 import { LAND_PATH } from './land-path';
+import { BALKANS } from './balkans-data';
 
 const BG = '#f4efe4';
 const PORPHYRY = '#7a2e2a';
@@ -185,6 +186,39 @@ function verginaSvg(): string {
   );
 }
 
+// 5) 現代の北マケドニアと近隣国の位置図（Natural Earth の実国境・北が上）
+function balkansSvg(): string {
+  const { W, H, land, out } = BALKANS;
+  const BLON0 = 18.8, BLAT_TOP = 44.2, BSX = 51.25, BSY = 68.4, BPAD = 8;
+  const bx = (lon: number) => +(BPAD + (lon - BLON0) * BSX).toFixed(1);
+  const by = (lat: number) => +(BPAD + (BLAT_TOP - lat) * BSY).toFixed(1);
+  const STONE_L = '#e7dcc4', STONE_B = '#b6a888';
+  const lbl = (lon: number, lat: number, t: string, o: { s?: number; f?: string; a?: string; w?: number; halo?: string } = {}) =>
+    `<text x="${bx(lon)}" y="${by(lat)}" font-size="${o.s || 10}" fill="${o.f || INK}" text-anchor="${o.a || 'middle'}" font-weight="${o.w || 600}" paint-order="stroke" stroke="${o.halo || BG}" stroke-width="2.6">${t}</text>`;
+  const neighbors = ['srb', 'kos', 'bgr', 'grc', 'alb'];
+  const cx = W - 20, cy = 22;
+  return (
+    `<svg class="diagram-single" viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="現代の北マケドニア共和国と、それを囲むセルビア・コソボ・ブルガリア・ギリシャ・アルバニアの位置を、北を上にした地図で示す">` +
+    `<rect width="${W}" height="${H}" fill="${SEA}"/>` +
+    `<path d="${land}" fill="${BG}" stroke="${STONE_B}" stroke-width="0.5"/>` +
+    neighbors.map((k) => `<path d="${out[k]}" fill="${STONE_L}" stroke="${STONE_B}" stroke-width="0.8"/>`).join('') +
+    `<path d="${out.nmk}" fill="${PORPHYRY}" fill-opacity="0.62" stroke="${DEEP}" stroke-width="1.3"/>` +
+    lbl(21.0, 43.5, 'セルビア') + lbl(20.6, 42.55, 'コソボ', { s: 8 }) + lbl(23.6, 42.2, 'ブルガリア') +
+    lbl(22.3, 40.15, 'ギリシャ') + lbl(19.85, 40.72, 'アルバニア', { s: 9 }) +
+    lbl(21.75, 41.35, '北マケドニア', { f: '#fff', w: 700, s: 11, halo: DEEP }) +
+    `<circle cx="${bx(21.43)}" cy="${by(42.0)}" r="3.4" fill="${GOLD}" stroke="#fff" stroke-width="1"/>` +
+    lbl(21.52, 42.07, 'スコピエ', { a: 'start', s: 8.5, f: '#fff', halo: DEEP }) +
+    `<circle cx="${bx(20.72)}" cy="${by(41.05)}" r="3" fill="${SEA}" stroke="#3c5560" stroke-width="0.9"/>` +
+    lbl(20.55, 41.0, 'オフリド湖', { a: 'end', s: 8 }) +
+    // 方位
+    `<circle cx="${cx}" cy="${cy}" r="13" fill="${BG}" stroke="${INK}" stroke-width="1"/>` +
+    `<path d="M${cx} ${cy - 11} l4 12 l-4 -3 l-4 3 Z" fill="${PORPHYRY}"/>` +
+    `<text x="${cx}" y="${cy - 12.5}" font-size="7.5" fill="${INK}" text-anchor="middle" font-weight="700">N</text>` +
+    `<text x="${W - 6}" y="${H - 6}" font-size="7" fill="${DEEP}" text-anchor="end" font-style="italic">地図データ: Natural Earth</text>` +
+    `</svg>`
+  );
+}
+
 const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
   'phalanx': {
     caption: 'サリサとファランクスの模式図。長槍サリサ（約5.5から6メートル）を構えた兵が密集し、後列の槍も前方に届いて、幾重もの槍ぶすまをつくった。図は仕組みを示すもので、隊列の人数や寸法は正確ではない。',
@@ -197,6 +231,10 @@ const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
   'kingdoms': {
     caption: 'ディアドコイの争いののちに分かれたヘレニズム三王国の地図（北が上）。マケドニアを**アンティゴノス朝**、エジプトを**プトレマイオス朝**、シリアからペルシアにかけての西アジアを**セレウコス朝**が治めた。海岸線は Natural Earth のデータに基づき、色分けした範囲は勢力のおおよその広がりで、正確な国境ではない。',
     inner: `<div class="diagram-wrap">${kingdomsSvg()}</div>`,
+  },
+  'balkans': {
+    caption: '現代の北マケドニア共和国と近隣国の位置図（北が上）。内陸のこの国は、北のセルビアとコソボ、東のブルガリア、南のギリシャ、西のアルバニアに囲まれている。金の点が首都スコピエ、南西の青い点が世界遺産のオフリド湖。国境は Natural Earth のデータに基づく。',
+    inner: `<div class="diagram-wrap">${balkansSvg()}</div>`,
   },
   'vergina': {
     caption: 'ヴェルギナの王墓の模式図。大きな墳丘の下に王墓が隠され、黄金の納骨箱（ラルナクス）が納められていた。蓋にはアルゲアス朝の象徴とされる星（太陽）の意匠が描かれていた。図は仕組みを示すもので、光線の数や寸法は正確ではない。',
