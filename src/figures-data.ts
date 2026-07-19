@@ -11,6 +11,7 @@ const GOLD_SOFT = '#d7b968';
 const INK = '#2b2622';
 const STONE = '#cabfa6';
 const SEA = '#aec6cf';
+const OLIVE = '#5f7a6a';
 
 // 1) サリサとファランクス（長槍の密集隊形）
 function phalanxSvg(): string {
@@ -87,7 +88,48 @@ function campaignSvg(): string {
   );
 }
 
-// 3) ヴェルギナの王墓と星（納骨箱の意匠）
+// 3) ディアドコイの争いのすえに分かれたヘレニズム三王国（勢力範囲の模式地図）
+function kingdomsSvg(): string {
+  // 大きいセレウコス朝を背面に、その上に他2つを重ねる。色は凡例で王朝に対応づける。
+  type R = { cx: number; cy: number; rx: number; ry: number; color: string; terr: string };
+  const regions: R[] = [
+    { cx: 214, cy: 104, rx: 96, ry: 50, color: OLIVE, terr: '西アジア' },      // セレウコス朝
+    { cx: 92,  cy: 158, rx: 40, ry: 22, color: GOLD, terr: 'エジプト' },        // プトレマイオス朝
+    { cx: 50,  cy: 46,  rx: 30, ry: 19, color: PORPHYRY, terr: 'マケドニア' },  // アンティゴノス朝
+  ];
+  let shapes = '';
+  for (const r of regions) {
+    shapes += `<ellipse cx="${r.cx}" cy="${r.cy}" rx="${r.rx}" ry="${r.ry}" fill="${r.color}" fill-opacity="0.24" stroke="${r.color}" stroke-width="2"/>`;
+    shapes += `<text x="${r.cx}" y="${r.cy + 4}" font-size="10" fill="${INK}" text-anchor="middle" font-weight="700">${r.terr}</text>`;
+  }
+  // 凡例（色→王朝名）
+  const legend: { color: string; name: string }[] = [
+    { color: PORPHYRY, name: 'アンティゴノス朝' },
+    { color: GOLD, name: 'プトレマイオス朝' },
+    { color: OLIVE, name: 'セレウコス朝' },
+  ];
+  let leg = '';
+  let lx = 12;
+  const ly = 190;
+  for (const item of legend) {
+    leg += `<rect x="${lx}" y="${ly - 7}" width="9" height="9" rx="1.5" fill="${item.color}" fill-opacity="0.5" stroke="${item.color}" stroke-width="1.2"/>`;
+    leg += `<text x="${lx + 13}" y="${ly + 1}" font-size="8.5" fill="${INK}">${item.name}</text>`;
+    lx += item.name.length * 9 + 26;
+  }
+  return (
+    `<svg class="diagram-single" viewBox="0 0 320 205" width="100%" role="img" aria-label="ディアドコイの争いののちに分かれたヘレニズム三王国（アンティゴノス朝・プトレマイオス朝・セレウコス朝）の勢力範囲を色分けした模式地図">` +
+    `<rect width="320" height="205" fill="${BG}"/>` +
+    // 地中海（三王国の間の海域）
+    `<path d="M78 44 Q120 54 150 70 Q166 82 150 96 Q112 112 84 100 Q70 92 78 76 Z" fill="${SEA}" fill-opacity="0.5"/>` +
+    `<text x="112" y="82" font-size="8" fill="#3c5560" text-anchor="middle" font-style="italic">地中海</text>` +
+    shapes +
+    leg +
+    `<text x="308" y="176" font-size="7.5" fill="${DEEP}" text-anchor="end" font-style="italic">範囲は大づかみの模式・正確な国境ではない</text>` +
+    `</svg>`
+  );
+}
+
+// 4) ヴェルギナの王墓と星（納骨箱の意匠）
 function verginaSvg(): string {
   // 8方向×2の星（光線数は出典で確定していないため、意匠として描く）
   const cx = 214, cy = 74, R = 30, r = 11;
@@ -126,6 +168,10 @@ const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
   'campaign': {
     caption: '東方遠征の道すじと四つの決戦の模式地図。西のマケドニア（ペラ）を発ち、グラニコス・イッソスで勝ち、南のエジプトへ回ったのち、ガウガメラでアケメネス朝を破り、東のヒュダスペス（インダス川の支流）にまで達した。◆が決戦の地、●がおもな都市を表す。配置は大づかみの模式で、正確な地理ではない。',
     inner: `<div class="diagram-wrap">${campaignSvg()}</div>`,
+  },
+  'kingdoms': {
+    caption: 'ディアドコイの争いののちに分かれたヘレニズム三王国の模式地図。マケドニアを**アンティゴノス朝**、エジプトを**プトレマイオス朝**、シリアからペルシアにかけての西アジアを**セレウコス朝**が治めた。色分けは勢力のおおよその範囲を示すもので、正確な国境ではない。',
+    inner: `<div class="diagram-wrap">${kingdomsSvg()}</div>`,
   },
   'vergina': {
     caption: 'ヴェルギナの王墓の模式図。大きな墳丘の下に王墓が隠され、黄金の納骨箱（ラルナクス）が納められていた。蓋にはアルゲアス朝の象徴とされる星（太陽）の意匠が描かれていた。図は仕組みを示すもので、光線の数や寸法は正確ではない。',
