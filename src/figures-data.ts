@@ -1,7 +1,9 @@
 // 自作SVG模式図のHTML文字列を一元管理する単一の真実源（SSOT）。
 // React版（App.tsx の {{figure:KEY}} 展開）と prerender の双方が使う。
-// テーマ：王国の紫紅 #7a2e2a × 金 #b8912f × 羊皮紙 #f4efe4。すべて模式図であり、
-// 縮尺や配置は正確な地理・寸法を表さない（本文とキャプションで断る）。
+// テーマ：王国の紫紅 #7a2e2a × 金 #b8912f × 羊皮紙 #f4efe4。
+// 地図は実海岸線（Natural Earth 50m）に基づき、北を上にした正距円筒図法で描く。
+
+import { LAND_PATH } from './land-path';
 
 const BG = '#f4efe4';
 const PORPHYRY = '#7a2e2a';
@@ -10,8 +12,38 @@ const GOLD = '#b8912f';
 const GOLD_SOFT = '#d7b968';
 const INK = '#2b2622';
 const STONE = '#cabfa6';
-const SEA = '#aec6cf';
+const SEA = '#a9c3cf';
+const SEA_LINE = '#7c9aa6';
 const OLIVE = '#5f7a6a';
+
+// ─── 共有ベースマップ（正距円筒＝経度緯度をそのまま平面に置く。北が上・東が右） ───
+// 図の向きが「適当」という指摘（2026-07-19）を受け、実座標に基づく向きの正しい地図に作り替えた。
+// 縮尺は概略・海岸線は簡略化しているが、東西南北と地点どうしの相対位置は実地理に沿う。
+const MAP_W = 344;
+const MAP_H = 188;
+const LON0 = 19, LAT_TOP = 44;      // 左上の基準（経度19度・緯度44度）
+const SX = 5.6, SY = 6.6;           // 1度あたりのピクセル（緯度33度付近で東西を圧縮）
+const PAD = 10;
+function px(lon: number): number { return +(PAD + (lon - LON0) * SX).toFixed(1); }
+function py(lat: number): number { return +(PAD + (LAT_TOP - lat) * SY).toFixed(1); }
+function baseMap(): string {
+  const seaLabel = (lon: number, lat: number, t: string, size = 8) =>
+    `<text x="${px(lon)}" y="${py(lat)}" font-size="${size}" fill="#3c5560" text-anchor="middle" font-style="italic">${t}</text>`;
+  // 方位（右上・北が上）
+  const cx = MAP_W - 20, cy = 22;
+  const compass =
+    `<circle cx="${cx}" cy="${cy}" r="13" fill="${BG}" stroke="${INK}" stroke-width="1"/>` +
+    `<path d="M${cx} ${cy - 11} l4 12 l-4 -3 l-4 3 Z" fill="${PORPHYRY}"/>` +
+    `<text x="${cx}" y="${cy - 12.5}" font-size="7.5" fill="${INK}" text-anchor="middle" font-weight="700">N</text>`;
+  return (
+    // 海を全面に敷き、実海岸線に基づく陸地を羊皮紙色で重ねる
+    `<rect width="${MAP_W}" height="${MAP_H}" fill="${SEA}"/>` +
+    `<path d="${LAND_PATH}" fill="${BG}" stroke="${SEA_LINE}" stroke-width="0.6"/>` +
+    seaLabel(27, 34.3, '地中海') + seaLabel(34.5, 43, '黒海', 7.5) +
+    seaLabel(51, 27.2, 'ペルシア湾', 7) + seaLabel(50.5, 41.5, 'カスピ海', 7) + seaLabel(36.2, 22.5, '紅海', 7) +
+    compass
+  );
+}
 
 // 1) サリサとファランクス（長槍の密集隊形）
 function phalanxSvg(): string {
@@ -38,71 +70,63 @@ function phalanxSvg(): string {
   );
 }
 
-// 2) 東方遠征の模式地図（2D配置・正確な地理ではない）。西→東の広がりと、南のエジプトへの
-//    迂回、メソポタミアへの転進を大づかみに示し、決戦4つ（B1a）を◆で重ねる。
+// 2) 東方遠征の地図（実座標に基づく・北が上）。進軍路と四つの決戦（B1a）を重ねる。
 function campaignSvg(): string {
-  type P = { x: number; y: number; label: string; kind: 'battle' | 'city'; year?: string; up?: boolean; anchor?: string };
-  // 進軍の順に並べる（この順でルート線を引く）
+  type P = { lon: number; lat: number; label: string; kind: 'battle' | 'city'; year?: string; ldx: number; ldy: number; anchor: string };
+  // 進軍の順（この順でルート線を引く）。座標はおおよその実地点。ラベルは衝突を避けて個別配置。
   const pts: P[] = [
-    { x: 34,  y: 44,  label: 'ペラ',        kind: 'city',   up: true },
-    { x: 82,  y: 50,  label: 'グラニコス',   kind: 'battle', year: '前334', up: true },
-    { x: 128, y: 78,  label: 'イッソス',     kind: 'battle', year: '前333', up: false },
-    { x: 96,  y: 150, label: 'エジプト',     kind: 'city',   up: false },
-    { x: 176, y: 92,  label: 'ガウガメラ',   kind: 'battle', year: '前331', up: true },
-    { x: 196, y: 120, label: 'バビロン',     kind: 'city',   up: false },
-    { x: 300, y: 96,  label: 'ヒュダスペス',  kind: 'battle', year: '前326', up: true, anchor: 'end' },
+    { lon: 22.5, lat: 40.8, label: 'ペラ',            kind: 'city',   ldx: -7, ldy: -9, anchor: 'end' },
+    { lon: 27.3, lat: 40.2, label: 'グラニコス',       kind: 'battle', year: '前334', ldx: 7, ldy: -9, anchor: 'start' },
+    { lon: 36.2, lat: 36.9, label: 'イッソス',         kind: 'battle', year: '前333', ldx: 8, ldy: 4, anchor: 'start' },
+    { lon: 29.9, lat: 31.2, label: 'アレクサンドリア',  kind: 'city',   ldx: 0, ldy: 17, anchor: 'middle' },
+    { lon: 43.4, lat: 36.4, label: 'ガウガメラ',       kind: 'battle', year: '前331', ldx: 0, ldy: -11, anchor: 'middle' },
+    { lon: 44.4, lat: 32.5, label: 'バビロン',         kind: 'city',   ldx: -6, ldy: 16, anchor: 'end' },
+    { lon: 52.9, lat: 29.9, label: 'ペルセポリス',      kind: 'city',   ldx: 8, ldy: 4, anchor: 'start' },
+    { lon: 73.7, lat: 32.9, label: 'ヒュダスペス',      kind: 'battle', year: '前326', ldx: -7, ldy: -11, anchor: 'end' },
   ];
-  const route = pts.map((p) => `${p.x},${p.y}`).join(' ');
+  const route = pts.map((p) => `${px(p.lon)},${py(p.lat)}`).join(' ');
   let marks = '';
   for (const p of pts) {
+    const x = px(p.lon), y = py(p.lat);
     if (p.kind === 'battle') {
-      // ◆（決戦の地）
-      marks += `<path d="M${p.x} ${p.y - 6} L${p.x + 6} ${p.y} L${p.x} ${p.y + 6} L${p.x - 6} ${p.y} Z" fill="${PORPHYRY}" stroke="${GOLD}" stroke-width="1.2"/>`;
+      marks += `<path d="M${x} ${y - 6} L${x + 6} ${y} L${x} ${y + 6} L${x - 6} ${y} Z" fill="${PORPHYRY}" stroke="${GOLD}" stroke-width="1.2"/>`;
     } else {
-      marks += `<circle cx="${p.x}" cy="${p.y}" r="4" fill="${INK}"/>`;
+      marks += `<circle cx="${x}" cy="${y}" r="3.6" fill="${INK}"/>`;
     }
-    const anchor = p.anchor || 'middle';
-    const lx = anchor === 'end' ? p.x + 6 : p.x;
-    const ly = p.up ? p.y - 11 : p.y + 17;
-    marks += `<text x="${lx}" y="${ly}" font-size="9" fill="${INK}" text-anchor="${anchor}" font-weight="600">${p.label}</text>`;
-    if (p.year) marks += `<text x="${lx}" y="${p.up ? p.y - 22 : p.y + 28}" font-size="7.5" fill="${DEEP}" text-anchor="${anchor}">${p.year}</text>`;
+    const lx = x + p.ldx, ly = y + p.ldy;
+    marks += `<text x="${lx}" y="${ly}" font-size="9" fill="${INK}" text-anchor="${p.anchor}" font-weight="600" paint-order="stroke" stroke="${BG}" stroke-width="2.4">${p.label}</text>`;
+    if (p.year) marks += `<text x="${lx}" y="${p.ldy < 0 ? ly - 11 : ly + 11}" font-size="7.5" fill="${DEEP}" text-anchor="${p.anchor}" paint-order="stroke" stroke="${BG}" stroke-width="2.2">${p.year}</text>`;
   }
   return (
-    `<svg class="diagram-single" viewBox="0 0 320 200" width="100%" role="img" aria-label="アレクサンドロス大王の東方遠征の道すじと四つの決戦（グラニコス・イッソス・ガウガメラ・ヒュダスペス）を示す模式地図">` +
-    `<rect width="320" height="200" fill="${BG}"/>` +
-    // 地中海（左上のおおまかな海域）
-    `<path d="M0 20 Q70 30 110 44 Q140 55 120 74 Q80 96 30 86 Q8 82 0 96 Z" fill="${SEA}" opacity="0.55"/>` +
-    `<text x="40" y="60" font-size="8.5" fill="#3c5560" text-anchor="middle" font-style="italic">地中海</text>` +
-    // 遠征ルート
+    `<svg class="diagram-single" viewBox="0 0 ${MAP_W} ${MAP_H}" width="100%" role="img" aria-label="アレクサンドロス大王の東方遠征の進軍路と四つの決戦（グラニコス・イッソス・ガウガメラ・ヒュダスペス）を、北を上にした地図上に示す">` +
+    baseMap() +
     `<polyline points="${route}" fill="none" stroke="${GOLD}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>` +
-    // ルート終端の矢じり（ヒュダスペス手前）
-    `<path d="M292 90 l10 6 l-11 5" fill="none" stroke="${GOLD}" stroke-width="2.4" stroke-linejoin="round"/>` +
     marks +
     // 凡例
-    `<path d="M18 176 l5 -5 l5 5 l-5 5 Z" fill="${PORPHYRY}" stroke="${GOLD}" stroke-width="1"/>` +
-    `<text x="30" y="179" font-size="8" fill="${INK}">決戦</text>` +
-    `<circle cx="70" cy="176" r="3.5" fill="${INK}"/>` +
-    `<text x="78" y="179" font-size="8" fill="${INK}">おもな都市</text>` +
-    `<text x="316" y="192" font-size="7.5" fill="${DEEP}" text-anchor="end" font-style="italic">配置は模式・正確な地理ではない</text>` +
+    `<path d="M14 ${MAP_H - 10} l5 -5 l5 5 l-5 5 Z" fill="${PORPHYRY}" stroke="${GOLD}" stroke-width="1"/>` +
+    `<text x="26" y="${MAP_H - 7} " font-size="8" fill="${INK}">決戦</text>` +
+    `<circle cx="66" cy="${MAP_H - 10}" r="3.4" fill="${INK}"/>` +
+    `<text x="74" y="${MAP_H - 7}" font-size="8" fill="${INK}">おもな都市</text>` +
+    `<text x="${MAP_W - 6}" y="${MAP_H - 6}" font-size="7" fill="${DEEP}" text-anchor="end" font-style="italic">地図データ: Natural Earth</text>` +
     `</svg>`
   );
 }
 
-// 3) ディアドコイの争いのすえに分かれたヘレニズム三王国（勢力範囲の模式地図）
+// 3) ヘレニズム三王国の勢力範囲（実座標に基づく・北が上）。色分けで王朝を示す。
 function kingdomsSvg(): string {
-  // 大きいセレウコス朝を背面に、その上に他2つを重ねる。色は凡例で王朝に対応づける。
-  type R = { cx: number; cy: number; rx: number; ry: number; color: string; terr: string };
+  // 各王朝の中心をおおよその実座標（経度緯度）で置き、勢力の広がりを楕円で表す。
+  type R = { lon: number; lat: number; rx: number; ry: number; rot: number; color: string; terr: string };
   const regions: R[] = [
-    { cx: 214, cy: 104, rx: 96, ry: 50, color: OLIVE, terr: '西アジア' },      // セレウコス朝
-    { cx: 92,  cy: 158, rx: 40, ry: 22, color: GOLD, terr: 'エジプト' },        // プトレマイオス朝
-    { cx: 50,  cy: 46,  rx: 30, ry: 19, color: PORPHYRY, terr: 'マケドニア' },  // アンティゴノス朝
+    { lon: 47, lat: 34, rx: 74, ry: 40, rot: 0, color: OLIVE, terr: '西アジア' },       // セレウコス朝（シリア〜メソポタミア〜ペルシア）
+    { lon: 30.5, lat: 27.5, rx: 26, ry: 30, rot: 0, color: GOLD, terr: 'エジプト' },     // プトレマイオス朝
+    { lon: 22.5, lat: 40, rx: 22, ry: 17, rot: 0, color: PORPHYRY, terr: 'マケドニア' }, // アンティゴノス朝
   ];
   let shapes = '';
   for (const r of regions) {
-    shapes += `<ellipse cx="${r.cx}" cy="${r.cy}" rx="${r.rx}" ry="${r.ry}" fill="${r.color}" fill-opacity="0.24" stroke="${r.color}" stroke-width="2"/>`;
-    shapes += `<text x="${r.cx}" y="${r.cy + 4}" font-size="10" fill="${INK}" text-anchor="middle" font-weight="700">${r.terr}</text>`;
+    const cx = px(r.lon), cy = py(r.lat);
+    shapes += `<ellipse cx="${cx}" cy="${cy}" rx="${r.rx}" ry="${r.ry}" fill="${r.color}" fill-opacity="0.26" stroke="${r.color}" stroke-width="2"/>`;
+    shapes += `<text x="${cx}" y="${cy + 4}" font-size="10" fill="${INK}" text-anchor="middle" font-weight="700">${r.terr}</text>`;
   }
-  // 凡例（色→王朝名）
   const legend: { color: string; name: string }[] = [
     { color: PORPHYRY, name: 'アンティゴノス朝' },
     { color: GOLD, name: 'プトレマイオス朝' },
@@ -110,21 +134,18 @@ function kingdomsSvg(): string {
   ];
   let leg = '';
   let lx = 12;
-  const ly = 190;
+  const ly = MAP_H - 6;
   for (const item of legend) {
     leg += `<rect x="${lx}" y="${ly - 7}" width="9" height="9" rx="1.5" fill="${item.color}" fill-opacity="0.5" stroke="${item.color}" stroke-width="1.2"/>`;
     leg += `<text x="${lx + 13}" y="${ly + 1}" font-size="8.5" fill="${INK}">${item.name}</text>`;
     lx += item.name.length * 9 + 26;
   }
   return (
-    `<svg class="diagram-single" viewBox="0 0 320 205" width="100%" role="img" aria-label="ディアドコイの争いののちに分かれたヘレニズム三王国（アンティゴノス朝・プトレマイオス朝・セレウコス朝）の勢力範囲を色分けした模式地図">` +
-    `<rect width="320" height="205" fill="${BG}"/>` +
-    // 地中海（三王国の間の海域）
-    `<path d="M78 44 Q120 54 150 70 Q166 82 150 96 Q112 112 84 100 Q70 92 78 76 Z" fill="${SEA}" fill-opacity="0.5"/>` +
-    `<text x="112" y="82" font-size="8" fill="#3c5560" text-anchor="middle" font-style="italic">地中海</text>` +
+    `<svg class="diagram-single" viewBox="0 0 ${MAP_W} ${MAP_H + 12}" width="100%" role="img" aria-label="ディアドコイの争いののちに分かれたヘレニズム三王国（アンティゴノス朝・プトレマイオス朝・セレウコス朝）の勢力範囲を、北を上にした地図上に色分けして示す">` +
+    baseMap() +
     shapes +
-    leg +
-    `<text x="308" y="176" font-size="7.5" fill="${DEEP}" text-anchor="end" font-style="italic">範囲は大づかみの模式・正確な国境ではない</text>` +
+    `<g transform="translate(0 12)">${leg}</g>` +
+    `<text x="${MAP_W - 6}" y="${MAP_H - 6}" font-size="7" fill="${DEEP}" text-anchor="end" font-style="italic">範囲は概略・正確な国境ではない</text>` +
     `</svg>`
   );
 }
@@ -166,11 +187,11 @@ const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
     inner: `<div class="diagram-wrap">${phalanxSvg()}</div>`,
   },
   'campaign': {
-    caption: '東方遠征の道すじと四つの決戦の模式地図。西のマケドニア（ペラ）を発ち、グラニコス・イッソスで勝ち、南のエジプトへ回ったのち、ガウガメラでアケメネス朝を破り、東のヒュダスペス（インダス川の支流）にまで達した。◆が決戦の地、●がおもな都市を表す。配置は大づかみの模式で、正確な地理ではない。',
+    caption: '東方遠征の道すじと四つの決戦の地図（北が上）。西のマケドニア（ペラ）を発ち、グラニコス・イッソスで勝ち、南のエジプトへ回ったのち、ガウガメラでアケメネス朝を破り、東のヒュダスペス（インダス川の支流）にまで達した。◆が決戦の地、●がおもな都市で、位置はおおよその実地点。海岸線は Natural Earth のデータに基づく。',
     inner: `<div class="diagram-wrap">${campaignSvg()}</div>`,
   },
   'kingdoms': {
-    caption: 'ディアドコイの争いののちに分かれたヘレニズム三王国の模式地図。マケドニアを**アンティゴノス朝**、エジプトを**プトレマイオス朝**、シリアからペルシアにかけての西アジアを**セレウコス朝**が治めた。色分けは勢力のおおよその範囲を示すもので、正確な国境ではない。',
+    caption: 'ディアドコイの争いののちに分かれたヘレニズム三王国の地図（北が上）。マケドニアを**アンティゴノス朝**、エジプトを**プトレマイオス朝**、シリアからペルシアにかけての西アジアを**セレウコス朝**が治めた。海岸線は Natural Earth のデータに基づき、色分けした範囲は勢力のおおよその広がりで、正確な国境ではない。',
     inner: `<div class="diagram-wrap">${kingdomsSvg()}</div>`,
   },
   'vergina': {
