@@ -118,7 +118,7 @@ function kingdomsSvg(): string {
   const clipDef = `<defs><clipPath id="hk-land"><path d="${LAND_PATH}"/></clipPath></defs>`;
   type R = { color: string; terr: string; llon: number; llat: number; anchor: string; poly: [number, number][] };
   const regions: R[] = [
-    { color: OLIVE, terr: '西アジア', llon: 53, llat: 35.5, anchor: 'middle', poly: [[35, 41.8], [78, 41.8], [78, 28], [49, 28], [40, 32], [35, 35.5]] },       // セレウコス朝（シリア〜メソポタミア〜ペルシア〜東方）
+    { color: OLIVE, terr: '西アジア', llon: 55, llat: 35.5, anchor: 'middle', poly: [[35, 47], [82, 47], [82, 27], [52, 27], [46, 30], [40, 31.5], [35, 34.5]] }, // セレウコス朝（シリア〜メソポタミア〜ペルシア〜東方。上辺・右辺は画面外へ逃がし、陸を直線で切らない）
     { color: GOLD, terr: 'エジプト', llon: 30, llat: 27, anchor: 'middle', poly: [[24.5, 32], [35, 32], [35, 29], [34, 24], [30, 22], [25, 22.5], [24.5, 28]] }, // プトレマイオス朝（エジプト〜南レバント沿岸）
     { color: PORPHYRY, terr: 'マケドニア', llon: 20.4, llat: 38.6, anchor: 'start', poly: [[18.8, 41.8], [25, 41.8], [25, 36], [18.8, 36]] },                    // アンティゴノス朝（マケドニア〜ギリシア）
   ];
