@@ -5,6 +5,7 @@
 
 import { LAND_PATH } from './land-path';
 import { BALKANS } from './balkans-data';
+import { GREECE_LAND } from './greece-path';
 
 const BG = '#f4efe4';
 const PORPHYRY = '#7a2e2a';
@@ -219,6 +220,60 @@ function balkansSvg(): string {
   );
 }
 
+// 6) マケドニアと南部ギリシャのポリスの位置図（Natural Earth 10m の実海岸線・北が上）
+function greeceSvg(): string {
+  const GW = 344, GH = 373, GPAD = 8;
+  const GLON0 = 19.4, GLAT_TOP = 41.9, GSX = 40, GSY = 51.0404;
+  const gx = (lon: number) => +(GPAD + (lon - GLON0) * GSX).toFixed(1);
+  const gy = (lat: number) => +(GPAD + (GLAT_TOP - lat) * GSY).toFixed(1);
+  const STONE_B = '#b6a888', SEA_INK = '#3c5560', EARTH = '#6b5a45';
+  type O = { s?: number; f?: string; a?: string; w?: number; halo?: string; dx?: number; dy?: number; i?: boolean };
+  const lbl = (lon: number, lat: number, t: string, o: O = {}) =>
+    `<text x="${gx(lon) + (o.dx || 0)}" y="${gy(lat) + (o.dy || 0)}" font-size="${o.s || 10}" fill="${o.f || INK}" text-anchor="${o.a || 'middle'}" font-weight="${o.w || 600}" paint-order="stroke" stroke="${o.halo || BG}" stroke-width="2.6"${o.i ? ' font-style="italic"' : ''}>${t}</text>`;
+  const dot = (lon: number, lat: number, r: number, fill: string) =>
+    `<circle cx="${gx(lon)}" cy="${gy(lat)}" r="${r}" fill="${fill}" stroke="#fff" stroke-width="1"/>`;
+  // 王家の都と南部のおもなポリス（座標は実地点）
+  const royal: [number, number, string, string, number, number][] = [
+    [22.52, 40.76, 'ペラ', 'start', 4, -3],
+    [22.32, 40.48, 'アイガイ', 'end', -5, 4],
+  ];
+  const poleis: [number, number, string, string, number, number][] = [
+    [23.73, 37.98, 'アテナイ', 'start', 5, 1],
+    [23.32, 38.32, 'テーバイ', 'start', 5, -4],
+    [22.93, 37.94, 'コリントス', 'end', -5, -3],
+    [22.72, 37.63, 'アルゴス', 'start', 5, 7],
+    [22.43, 37.07, 'スパルタ', 'start', 5, 3],
+    [21.63, 37.64, 'オリュンピア', 'end', -5, 3],
+  ];
+  return (
+    `<svg class="diagram-single" viewBox="0 0 ${GW} ${GH}" width="100%" role="img" aria-label="マケドニア王国の都ペラ・アイガイと、南部ギリシャのポリス（アテナイ・テーバイ・コリントス・アルゴス・スパルタ・オリュンピア）の位置を、北を上にした地図で示す">` +
+    `<rect width="${GW}" height="${GH}" fill="${SEA}"/>` +
+    `<path d="${GREECE_LAND}" fill="${BG}" stroke="${STONE_B}" stroke-width="0.6"/>` +
+    lbl(25.4, 38.9, 'エーゲ海', { f: SEA_INK, halo: SEA, i: true, w: 500 }) +
+    lbl(19.95, 38.2, 'イオニア海', { f: SEA_INK, halo: SEA, i: true, w: 500, s: 9 }) +
+    lbl(23.25, 35.35, '地中海', { f: SEA_INK, halo: SEA, i: true, w: 500, s: 9 }) +
+    lbl(21.6, 41.1, 'マケドニア', { s: 11, f: DEEP, w: 700 }) +
+    lbl(21.9, 39.6, 'テッサリア', { s: 9, f: EARTH }) +
+    lbl(21.95, 36.72, 'ペロポネソス半島', { s: 8.5, f: EARTH }) +
+    lbl(24.9, 35.25, 'クレタ島', { s: 8.5, f: EARTH }) +
+    royal.map(([lo, la, t, a, dx, dy]) => dot(lo, la, 4, PORPHYRY) + lbl(lo, la, t, { a, dx, dy, s: 10, w: 700, f: DEEP })).join('') +
+    poleis.map(([lo, la, t, a, dx, dy]) => dot(lo, la, 3.2, GOLD) + lbl(lo, la, t, { a, dx, dy, s: 9.5 })).join('') +
+    // 方位
+    `<circle cx="${GW - 20}" cy="22" r="13" fill="${BG}" stroke="${INK}" stroke-width="1"/>` +
+    `<path d="M${GW - 20} 11 l4 12 l-4 -3 l-4 3 Z" fill="${PORPHYRY}"/>` +
+    `<text x="${GW - 20}" y="9.5" font-size="7.5" fill="${INK}" text-anchor="middle" font-weight="700">N</text>` +
+    // 凡例
+    `<g transform="translate(10,${GH - 44})">` +
+    `<rect x="0" y="0" width="118" height="34" rx="3" fill="${BG}" fill-opacity="0.92" stroke="${STONE_B}" stroke-width="0.7"/>` +
+    `<circle cx="11" cy="11" r="4" fill="${PORPHYRY}" stroke="#fff" stroke-width="1"/>` +
+    `<text x="21" y="14" font-size="8.5" fill="${INK}">マケドニア王家の都</text>` +
+    `<circle cx="11" cy="25" r="3.2" fill="${GOLD}" stroke="#fff" stroke-width="1"/>` +
+    `<text x="21" y="28" font-size="8.5" fill="${INK}">南部のおもなポリス</text></g>` +
+    `<text x="${GW - 6}" y="${GH - 6}" font-size="7" fill="${DEEP}" text-anchor="end" font-style="italic">地図データ: Natural Earth</text>` +
+    `</svg>`
+  );
+}
+
 const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
   'phalanx': {
     caption: 'サリサとファランクスの模式図。長槍サリサ（約5.5から6メートル）を構えた兵が密集し、後列の槍も前方に届いて、幾重もの槍ぶすまをつくった。図は仕組みを示すもので、隊列の人数や寸法は正確ではない。',
@@ -231,6 +286,10 @@ const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
   'kingdoms': {
     caption: 'ディアドコイの争いののちに分かれたヘレニズム三王国の地図（北が上）。マケドニアを**アンティゴノス朝**、エジプトを**プトレマイオス朝**、シリアからペルシアにかけての西アジアを**セレウコス朝**が治めた。海岸線は Natural Earth のデータに基づき、色分けした範囲は勢力のおおよその広がりで、正確な国境ではない。',
     inner: `<div class="diagram-wrap">${kingdomsSvg()}</div>`,
+  },
+  'greece': {
+    caption: 'マケドニアと南部ギリシャの位置図（北が上）。マケドニアはエーゲ海の北に位置し、王家の都ペラとアイガイ（現在のヴェルギナ）は海に近い平野にあった。南のペロポネソス半島やアッティカには、アテナイ・スパルタ・テーバイ・アルゴス・コリントスといったポリスが並ぶ。王家が起源を主張したアルゴスも、王が参加を望んだ競技の地オリュンピアも、この南部にある。海岸線は Natural Earth のデータに基づき、都市の位置は実際の座標による。当時の勢力の境は示していない。',
+    inner: `<div class="diagram-wrap">${greeceSvg()}</div>`,
   },
   'balkans': {
     caption: '現代の北マケドニア共和国と近隣国の位置図（北が上）。内陸のこの国は、北のセルビアとコソボ、東のブルガリア、南のギリシャ、西のアルバニアに囲まれている。金の点が首都スコピエ、南西の青い点が世界遺産のオフリド湖。国境は Natural Earth のデータに基づく。',
