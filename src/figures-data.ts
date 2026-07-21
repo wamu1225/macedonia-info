@@ -156,6 +156,50 @@ function kingdomsSvg(): string {
   );
 }
 
+// 7) 支配勢力の移り変わりの帯年表（時間の長さを帯の幅で示す・地図ではない概念図）
+function rulersSvg(): string {
+  const RW = 344, RH = 150, RPAD = 16;
+  const YMIN = -150, YMAX = 1920;
+  const tx = (y: number) => +(RPAD + ((y - YMIN) / (YMAX - YMIN)) * (RW - 2 * RPAD)).toFixed(1);
+  const BY = 60, BH = 32;
+  const bands: [number, number, string, string, string][] = [
+    [-146, 1000, STONE, 'ローマ／東ローマ帝国', INK],
+    [1000, 1400, OLIVE, '', '#fff'],
+    [1400, 1912, PORPHYRY, 'オスマン帝国', '#fff'],
+  ];
+  let band = '';
+  for (const [y0, y1, c, label, fill] of bands) {
+    const x0 = tx(y0), x1 = tx(y1);
+    band += `<rect x="${x0}" y="${BY}" width="${(x1 - x0).toFixed(1)}" height="${BH}" fill="${c}"/>`;
+    if (label) band += `<text x="${((x0 + x1) / 2).toFixed(1)}" y="${BY + BH / 2 + 3.5}" font-size="9.5" fill="${fill}" text-anchor="middle" font-weight="700">${label}</text>`;
+  }
+  let div = '';
+  for (const y of [-146, 1000, 1400, 1912]) div += `<line x1="${tx(y)}" y1="${BY - 4}" x2="${tx(y)}" y2="${BY + BH + 4}" stroke="${BG}" stroke-width="1.4"/>`;
+  let axis = `<line x1="${tx(YMIN)}" y1="${BY + BH + 13}" x2="${tx(YMAX)}" y2="${BY + BH + 13}" stroke="${STONE}" stroke-width="1"/>`;
+  for (const [y, t] of [[-146, '前146'], [500, '500'], [1000, '1000'], [1500, '1500'], [1912, '1912']] as [number, string][]) {
+    const x = tx(y);
+    axis += `<line x1="${x}" y1="${BY + BH + 9}" x2="${x}" y2="${BY + BH + 17}" stroke="${STONE}" stroke-width="1"/>`;
+    axis += `<text x="${x}" y="${BY + BH + 29}" font-size="8" fill="#6b5a45" text-anchor="middle">${t}年</text>`;
+  }
+  const sx = tx(650);
+  const slav =
+    `<line x1="${sx}" y1="${BY - 20}" x2="${sx}" y2="${BY}" stroke="${DEEP}" stroke-width="1" stroke-dasharray="2 2"/>` +
+    `<circle cx="${sx}" cy="${BY - 20}" r="2.6" fill="${DEEP}"/>` +
+    `<text x="${sx + 5}" y="${BY - 22}" font-size="8" fill="${DEEP}" font-weight="600" text-anchor="start" paint-order="stroke" stroke="${BG}" stroke-width="2.4">6〜7世紀 スラヴ人の定住</text>`;
+  const midMed = ((tx(1000) + tx(1400)) / 2).toFixed(1);
+  const medLabel =
+    `<line x1="${midMed}" y1="${BY + BH}" x2="${midMed}" y2="${BY + BH + 33}" stroke="${OLIVE}" stroke-width="0.8" stroke-dasharray="2 2"/>` +
+    `<text x="${midMed}" y="${BY + BH + 44}" font-size="8.5" fill="${OLIVE}" text-anchor="middle" font-weight="700">中世＝諸勢力の交替</text>`;
+  return (
+    `<svg class="diagram-single" viewBox="0 0 ${RW} ${RH}" width="100%" role="img" aria-label="マケドニアの地を治めた勢力の移り変わりを、帯の幅で各時代の長さを表した帯年表。ローマから東ローマ帝国（紀元前146年から約1000年ごろ）、中世の諸勢力の交替、オスマン帝国（およそ1400年から1912年まで約500年）の順に続く">` +
+    `<rect width="${RW}" height="${RH}" fill="${BG}"/>` +
+    `<text x="${RW / 2}" y="18" font-size="11" fill="${DEEP}" text-anchor="middle" font-weight="700">マケドニアの地を治めた勢力の移り変わり</text>` +
+    `<text x="${RW / 2}" y="31" font-size="8" fill="#6b5a45" text-anchor="middle">帯の幅は、その支配が続いたおよその長さを表す</text>` +
+    slav + band + div + axis + medLabel +
+    `</svg>`
+  );
+}
+
 // 4) ヴェルギナの王墓と星（納骨箱の意匠）
 function verginaSvg(): string {
   // 8方向×2の星（光線数は出典で確定していないため、意匠として描く）
@@ -294,6 +338,10 @@ const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
   'balkans': {
     caption: '現代の北マケドニア共和国と近隣国の位置図（北が上）。内陸のこの国は、北のセルビアとコソボ、東のブルガリア、南のギリシャ、西のアルバニアに囲まれている。金の点が首都スコピエ、南西の青い点が世界遺産のオフリド湖。国境は Natural Earth のデータに基づく。',
     inner: `<div class="diagram-wrap">${balkansSvg()}</div>`,
+  },
+  'rulers': {
+    caption: 'マケドニアの地を治めた勢力の移り変わりを示した帯年表（北が上ではなく、左から右へ時間が進む）。帯の幅は、その支配がおよそどれだけ続いたかを表す。ローマ帝国からその流れをくむ東ローマ（ビザンティン）帝国までが千年あまりを占め、6から7世紀にはスラヴ人の定住が進んだ。中世にはブルガリアやセルビアなどの勢力が入れ替わり、およそ1400年ごろから1912年まで、五百年ほどオスマン帝国の統治が続いた。年の区切りはおおよそのもの。',
+    inner: `<div class="diagram-wrap">${rulersSvg()}</div>`,
   },
   'vergina': {
     caption: 'ヴェルギナの王墓の模式図。大きな墳丘の下に王墓が隠され、黄金の納骨箱（ラルナクス）が納められていた。蓋にはアルゲアス朝の象徴とされる星（太陽）の意匠が描かれていた。図は仕組みを示すもので、光線の数や寸法は正確ではない。',
