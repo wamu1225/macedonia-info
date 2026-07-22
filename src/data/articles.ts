@@ -36,6 +36,8 @@ const REF = {
   herodotus: { label: 'ヘロドトス『歴史』第5〜9巻（G. C. Macaulay 英訳・5.22 と 8.137-139）', publisher: 'Project Gutenberg', url: 'https://www.gutenberg.org/ebooks/2456' },
   arrian: { label: 'アリアノス『アレクサンドロス東征記』（E. J. Chinnock 英訳）', publisher: 'Project Gutenberg', url: 'https://www.gutenberg.org/ebooks/46976' },
   wheCyril: { label: 'Saint Cyril（テッサロニキ生まれ・グラゴル文字・オフリドのクレメンス）', publisher: 'World History Encyclopedia', url: 'https://www.worldhistory.org/Saint_Cyril/' },
+  wheVergina: { label: 'Vergina（1977年の未盗掘王墓・ラルナクス・ヴェルギナの星）', publisher: 'World History Encyclopedia', url: 'https://www.worldhistory.org/Vergina/' },
+  bartsiokas: { label: 'A. Bartsiokas「The eye injury of King Philip II and the skeletal evidence from the royal tomb II at Vergina」Science 288 (2000) 511-514（第二号墓＝フィリッポス3世アリダイオス説）', publisher: 'PubMed / Science', url: 'https://pubmed.ncbi.nlm.nih.gov/10775109/' },
 } as const;
 
 export const articles: Article[] = [
@@ -249,7 +251,7 @@ export const articles: Article[] = [
 
 見つかった墓のうち、第二号墓が誰のものかは、長く議論されてきた。
 
-ギリシャの考古学者のあいだでは、これを[フィリッポス2世](/macedonia-info/philip/)の墓とする見方が有力である。一方で、この比定には批判もある。ある研究者は、根拠とされた骨の特徴は通常の個体差の範囲であり、記録にあるフィリッポスの負傷の痕がヴェルギナの骨には見あたらないと指摘し、別の人物（フィリッポス3世アリダイオス）の可能性を唱えている。
+ギリシャの考古学者のあいだでは、これを[フィリッポス2世](/macedonia-info/philip/)の墓とする見方が有力である。この説の根拠の一つは、フィリッポス2世が史料の伝える目の負傷を負っていたことと、頭骨に見られるとされた傷の跡を結びつける議論だった。一方で、この比定には批判もある。人類学者のアントニス・バルツィオカスは、2000年に科学誌『サイエンス』に発表した研究で、頭骨の眼窩を調べ直したところそうした負傷の痕は認められないとして、この骨はフィリッポス2世ではなく、その息子でアレクサンドロス大王の異母兄にあたるフィリッポス3世アリダイオスのものだと論じた。
 
 📖 このように、有名な遺物でも「誰のものか」は確定していないことがある。本サイトは第二号墓を、フィリッポス2世の墓とする有力な説があるが異論もある、という形で紹介する。
 
@@ -262,7 +264,7 @@ export const articles: Article[] = [
 ペラのモザイクには、狩りの場面や神話の情景が生き生きと描かれている。これらは、テッセラと呼ばれる四角い小片を並べる後世の技法よりも前の、自然の小石だけで明暗を表した初期のモザイクとして知られる。王国の宮廷が高い美術の水準を持っていたことを、これらの作品は今に伝えている。その技法や題材は、後の時代の美術にも受けつがれていったと考えられている。
 `,
     updatedAt: '2026-07-08',
-    references: [REF.liviusAegae, REF.whe],
+    references: [REF.wheVergina, REF.bartsiokas, REF.liviusAegae, REF.whe],
   },
 
   // ───────── 6. 中世〜近世 ─────────
