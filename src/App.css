@@ -220,6 +220,18 @@
 
 /* ===== 目次 ===== */
 .toc { background: var(--paper-card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; margin-bottom: 26px; }
+/* 目次カードの上辺に雷文の細帯＝このサイト固有のモチーフを記事本文にも及ぼす */
+.toc::before {
+  content: "";
+  display: block;
+  height: 11px;
+  margin: -3px -6px 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='13' viewBox='0 0 26 13'%3E%3Cpath d='M0 11.5 H26 M4 11.5 V3 H21 V9 H10 V6 H16' fill='none' stroke='%23b8912f' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: center;
+  background-size: 26px 13px;
+  opacity: 0.5;
+}
 .toc-title { display: flex; align-items: center; gap: 6px; font-weight: 700; color: var(--porphyry-deep); margin-bottom: 6px; font-size: 0.92rem; }
 .toc-list { margin: 0; padding-left: 1.4em; }
 .toc-list li { margin-bottom: 3px; font-size: 0.9rem; }
