@@ -37,6 +37,7 @@ const REF = {
   arrian: { label: 'アリアノス『アレクサンドロス東征記』（E. J. Chinnock 英訳）', publisher: 'Project Gutenberg', url: 'https://www.gutenberg.org/ebooks/46976' },
   wheCyril: { label: 'Saint Cyril（テッサロニキ生まれ・グラゴル文字・オフリドのクレメンス）', publisher: 'World History Encyclopedia', url: 'https://www.worldhistory.org/Saint_Cyril/' },
   wheVergina: { label: 'Vergina（1977年の未盗掘王墓・ラルナクス・ヴェルギナの星）', publisher: 'World History Encyclopedia', url: 'https://www.worldhistory.org/Vergina/' },
+  plutarchAlex: { label: 'プルタルコス『英雄伝』アレクサンドロス伝（第9章・カイロネイアでの初陣／Dryden 英訳）', publisher: 'Project Gutenberg', url: 'https://www.gutenberg.org/ebooks/674' },
   bartsiokas: { label: 'A. Bartsiokas「The eye injury of King Philip II and the skeletal evidence from the royal tomb II at Vergina」Science 288 (2000) 511-514（第二号墓＝フィリッポス3世アリダイオス説）', publisher: 'PubMed / Science', url: 'https://pubmed.ncbi.nlm.nih.gov/10775109/' },
 } as const;
 
@@ -118,6 +119,8 @@ export const articles: Article[] = [
 
 強化された軍を率いて、フィリッポスはギリシャ本土へ影響力を広げた。紀元前338年の**カイロネイアの戦い**で、彼はアテナイとテーバイの連合軍を破り、ギリシャ本土の主導権を握った。
 
+この戦いは、のちに大王となる息子アレクサンドロスの初陣でもあった。プルタルコスの伝えるところでは、当時18歳の王子は、テーバイの精鋭部隊「神聖隊」に最初に斬り込んだとされる。父が築いた軍のなかで、息子はすでに一翼を担っていた。父の代にととのえられた強い軍と、ギリシャ本土の主導権という土台は、そのまま次の[アレクサンドロス3世](/macedonia-info/alexander/)の東方遠征へと引きつがれていく。
+
 カイロネイアの勝利は、それまで小国と見られがちだったマケドニアが、ギリシャの盟主となったことを世に示す出来事だった。その後、スパルタを除くギリシャ諸都市をまとめて**コリントス同盟**を結成し、その盟主となった。同盟はペルシアへの遠征を決め、フィリッポスはその総司令官に選ばれた。
 
 ## 暗殺
@@ -125,7 +128,7 @@ export const articles: Article[] = [
 しかし遠征を前にした紀元前336年、フィリッポスは護衛の一人パウサニアスによって暗殺された。事件が起きたのは、古都アイガイ（現在のヴェルギナ）で、娘クレオパトラの結婚式のために人々が集まった祝いの場であったと伝えられる。暗殺の動機については古くからさまざまに語られてきたが、確かなことは分かっていない。準備が進んでいたペルシア遠征は、王位を継いだ20歳の[アレクサンドロス3世](/macedonia-info/alexander/)に託されることになった。
 `,
     updatedAt: '2026-07-18',
-    references: [REF.whePhilip, REF.whe],
+    references: [REF.whePhilip, REF.plutarchAlex, REF.whe],
   },
 
   // ───────── 3. アレクサンドロス大王 ─────────
