@@ -202,34 +202,44 @@ function rulersSvg(): string {
 
 // 4) ヴェルギナの王墓と星（納骨箱の意匠）
 function verginaSvg(): string {
-  // 8方向×2の星（光線数は出典で確定していないため、意匠として描く）
-  const cx = 214, cy = 74, R = 30, r = 11;
+  // ヴェルギナの星は「幅のある三角形の光線16条」が実物の形。
+  // 2026-08-04 修正：従来は細い直線16本で描いており、汎用のきらめき記号にしか見えなかった
+  // （ユーザー指摘「図が低品質すぎる」）。光線を三角形にし、墓室も羨道つきの断面にする。
+  const cx = 214, cy = 78, R = 34, r = 12, half = Math.PI / 32;
   let star = '';
   for (let k = 0; k < 16; k++) {
-    const a = (k * Math.PI) / 8;
-    const x1 = cx + r * Math.cos(a), y1 = cy + r * Math.sin(a);
-    const x2 = cx + R * Math.cos(a), y2 = cy + R * Math.sin(a);
-    star += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${GOLD}" stroke-width="2.4"/>`;
+    const a = (k * Math.PI) / 8 - Math.PI / 2;
+    const tipX = cx + R * Math.cos(a), tipY = cy + R * Math.sin(a);
+    const b1x = cx + r * Math.cos(a - half), b1y = cy + r * Math.sin(a - half);
+    const b2x = cx + r * Math.cos(a + half), b2y = cy + r * Math.sin(a + half);
+    star += `<path d="M${b1x.toFixed(1)} ${b1y.toFixed(1)} L${tipX.toFixed(1)} ${tipY.toFixed(1)} L${b2x.toFixed(1)} ${b2y.toFixed(1)} Z" fill="${GOLD}"/>`;
   }
   return (
-    `<svg class="diagram-single" viewBox="0 0 300 160" width="100%" role="img" aria-label="ヴェルギナの大墳丘と王墓、黄金の納骨箱に描かれた星の意匠の模式図">` +
-    `<rect width="300" height="160" fill="${BG}"/>` +
-    // 大墳丘
-    `<path d="M14 120 a96 60 0 0 1 150 0 Z" fill="${STONE}"/>` +
-    // 墓室
-    `<rect x="60" y="96" width="56" height="24" fill="${DEEP}"/>` +
-    // 納骨箱（ラルナクス）
-    `<rect x="74" y="102" width="28" height="16" rx="2" fill="${GOLD}"/>` +
-    `<rect x="74" y="102" width="28" height="16" rx="2" fill="none" stroke="${DEEP}" stroke-width="1.2"/>` +
-    `<text x="80" y="136" font-size="9" fill="${INK}" text-anchor="middle">王墓と黄金の納骨箱</text>` +
-    // 星の意匠
+    `<svg class="diagram-single" viewBox="0 0 300 170" width="100%" role="img" aria-label="ヴェルギナの大墳丘の断面と、黄金の納骨箱に描かれた十六条の星の図">` +
+    `<rect width="300" height="170" fill="${BG}"/>` +
+    // 地面
+    `<line x1="8" y1="126" x2="292" y2="126" stroke="${INK}" stroke-width="1" opacity="0.35"/>` +
+    // 大墳丘（後世に築かれ、王墓を覆い隠した）
+    `<path d="M12 126 a92 62 0 0 1 148 0 Z" fill="${STONE}"/>` +
+    `<text x="86" y="52" font-size="9" fill="${INK}" text-anchor="middle" opacity="0.75">後世の大墳丘</text>` +
+    // 墓室（羨道＋玄室の断面）
+    `<rect x="70" y="96" width="58" height="30" fill="${DEEP}"/>` +
+    `<rect x="128" y="108" width="22" height="18" fill="${DEEP}"/>` +
+    // ファサードの柱を示す縦線
+    `<line x1="82" y1="96" x2="82" y2="126" stroke="${GOLD_SOFT}" stroke-width="1.4" opacity="0.6"/>` +
+    `<line x1="116" y1="96" x2="116" y2="126" stroke="${GOLD_SOFT}" stroke-width="1.4" opacity="0.6"/>` +
+    // 納骨箱（ラルナクス）＝箱に蓋の段をつける
+    `<rect x="88" y="110" width="24" height="12" rx="1.5" fill="${GOLD}" stroke="${DEEP}" stroke-width="1"/>` +
+    `<rect x="86" y="106" width="28" height="5" rx="1.5" fill="${GOLD}" stroke="${DEEP}" stroke-width="1"/>` +
+    `<text x="99" y="146" font-size="9" fill="${INK}" text-anchor="middle">王墓と黄金の納骨箱</text>` +
+    // 星（納骨箱の蓋の意匠）
     star +
-    `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${GOLD_SOFT}"/>` +
-    `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${DEEP}" stroke-width="1.2"/>` +
-    `<text x="${cx}" y="132" font-size="9" fill="${INK}" text-anchor="middle">アルゲアス朝の星</text>` +
+    `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${GOLD_SOFT}" stroke="${DEEP}" stroke-width="1"/>` +
+    `<text x="${cx}" y="146" font-size="9" fill="${INK}" text-anchor="middle">十六条の星（蓋の意匠）</text>` +
     `</svg>`
   );
 }
+
 
 // 5) 現代の北マケドニアと近隣国の位置図（Natural Earth の実国境・北が上）
 function balkansSvg(): string {
