@@ -219,19 +219,20 @@ function verginaSvg(): string {
     `<rect width="300" height="170" fill="${BG}"/>` +
     // 地面
     `<line x1="8" y1="126" x2="292" y2="126" stroke="${INK}" stroke-width="1" opacity="0.35"/>` +
-    // 大墳丘（後世に築かれ、王墓を覆い隠した）
-    `<path d="M12 126 a92 62 0 0 1 148 0 Z" fill="${STONE}"/>` +
-    `<text x="86" y="52" font-size="9" fill="${INK}" text-anchor="middle" opacity="0.75">後世の大墳丘</text>` +
-    // 墓室（羨道＋玄室の断面）
-    `<rect x="70" y="96" width="58" height="30" fill="${DEEP}"/>` +
-    `<rect x="128" y="108" width="22" height="18" fill="${DEEP}"/>` +
-    // ファサードの柱を示す縦線
-    `<line x1="82" y1="96" x2="82" y2="126" stroke="${GOLD_SOFT}" stroke-width="1.4" opacity="0.6"/>` +
-    `<line x1="116" y1="96" x2="116" y2="126" stroke="${GOLD_SOFT}" stroke-width="1.4" opacity="0.6"/>` +
-    // 納骨箱（ラルナクス）＝箱に蓋の段をつける
-    `<rect x="88" y="110" width="24" height="12" rx="1.5" fill="${GOLD}" stroke="${DEEP}" stroke-width="1"/>` +
-    `<rect x="86" y="106" width="28" height="5" rx="1.5" fill="${GOLD}" stroke="${DEEP}" stroke-width="1"/>` +
-    `<text x="99" y="146" font-size="9" fill="${INK}" text-anchor="middle">王墓と黄金の納骨箱</text>` +
+    // 後世の大墳丘（墓室を完全に覆う大きさ。これが未盗掘で残った理由）
+    `<path d="M12 126 A88 72 0 0 1 188 126 Z" fill="${STONE}"/>` +
+    `<text x="100" y="48" font-size="9" fill="${INK}" text-anchor="middle" opacity="0.8">後世に築かれた大墳丘</text>` +
+    // 玄室（墳丘の内側に完全に収まる）
+    `<rect x="70" y="94" width="60" height="32" fill="${DEEP}"/>` +
+    // 羨道（玄室から右へ。墳丘の内側で止める）
+    `<rect x="130" y="108" width="26" height="18" fill="${DEEP}"/>` +
+    // ファサードの柱
+    `<line x1="80" y1="94" x2="80" y2="126" stroke="${GOLD_SOFT}" stroke-width="1.4" opacity="0.55"/>` +
+    `<line x1="120" y1="94" x2="120" y2="126" stroke="${GOLD_SOFT}" stroke-width="1.4" opacity="0.55"/>` +
+    // 納骨箱（ラルナクス）＝本体＋蓋の段
+    `<rect x="88" y="108" width="24" height="13" rx="1.5" fill="${GOLD}" stroke="${DEEP}" stroke-width="1"/>` +
+    `<rect x="86" y="103" width="28" height="6" rx="1.5" fill="${GOLD}" stroke="${DEEP}" stroke-width="1"/>` +
+    `<text x="100" y="146" font-size="9" fill="${INK}" text-anchor="middle">王墓と黄金の納骨箱</text>` +
     // 星（納骨箱の蓋の意匠）
     star +
     `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${GOLD_SOFT}" stroke="${DEEP}" stroke-width="1"/>` +
