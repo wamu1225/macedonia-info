@@ -220,7 +220,7 @@ function verginaSvg(): string {
     // 地面
     `<line x1="8" y1="126" x2="292" y2="126" stroke="${INK}" stroke-width="1" opacity="0.35"/>` +
     // 後世の大墳丘（墓室を完全に覆う大きさ。これが未盗掘で残った理由）
-    `<path d="M12 126 A88 72 0 0 1 188 126 Z" fill="${STONE}"/>` +
+    `<path d="M10 126 Q100 14 190 126 Z" fill="${STONE}"/>` +
     `<text x="100" y="48" font-size="9" fill="${INK}" text-anchor="middle" opacity="0.8">後世に築かれた大墳丘</text>` +
     // 玄室（墳丘の内側に完全に収まる）
     `<rect x="70" y="94" width="60" height="32" fill="${DEEP}"/>` +
