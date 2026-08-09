@@ -9,10 +9,10 @@ import { sectionIconSvg } from './section-icons';
 import { tokenizeInline } from './lib/inline';
 import type { InlineToken } from './lib/inline';
 import { TIMELINE } from './data/timeline-data';
+import { SITE_NAME, ABOUT_CONTENT, PRIVACY_CONTENT } from './data/static-pages';
 import './App.css';
 
 const BASE = '/macedonia-info';
-const SITE_NAME = 'マケドニア史ガイド';
 
 function SectionIcon({ name, size = 24 }: { name: string; size?: number }) {
   return <span className="section-icon" dangerouslySetInnerHTML={{ __html: sectionIconSvg(name, size) }} />;
@@ -380,31 +380,6 @@ function ArticlePage({ article }: { article: Article }) {
   );
 }
 
-const ABOUT_CONTENT = `本サイト「${SITE_NAME}」は、古代マケドニア王国を中心に、その興亡と、「マケドニア」という名が現代までたどった道すじを、一望できるようにまとめたものです。トップでは古代から現代までを結ぶ年表を示し、各ページでアルゲアス朝、フィリッポス2世、アレクサンドロス大王、ディアドコイの争い、ヴェルギナとペラの考古学、中世から現代の北マケドニア共和国と国名問題までを扱う。
-
-## 編集と制作の方針
-
-本サイトの内容は、World History Encyclopedia や Livius.org、NATO などの公開情報を参照し、事実を確認したうえで、運営者が自分の言葉で書いています。出典の文章をそのまま転載することはありません。
-
-## 諸説の扱い
-
-古代の年代や人物には諸説があります。ヴェルギナ第二号墓が誰のものかといった考古学的な比定にも、専門家のあいだで異論のあるものがあります。本サイトは、こうした事項を断定せず、有力な見方と異論をあわせて示すことを心がけています。確認できなかった数値や逸話は書いていません。
-
-## お問い合わせ
-
-ご質問や誤りのご指摘は[こちらのGoogleフォーム](https://forms.gle/ccMv7oKwz6ysDHBe6)からお願いします。`;
-
-const PRIVACY_CONTENT = `## アクセス解析
-
-本サイトでは、サイトの利用状況を把握するために Google Analytics を使用しています。Google Analytics はクッキーを利用して匿名のトラフィックデータを収集します。収集される情報は匿名で、個人を特定するものではありません。
-
-## 広告について
-
-本サイトでは Google AdSense などの第三者配信の広告サービスを利用することがあります。広告配信事業者は、ユーザーの興味に応じた広告を表示するためにクッキーを使用することがあります。Cookie を無効にする設定や、Google の広告設定により、パーソナライズ広告を無効にできます。
-
-## 免責事項
-
-本サイトの情報は可能な限り正確を期していますが、その完全性や正確性を保証するものではありません。古代の年代や比定には諸説があり、現代の統計は調査の年や資料によって変わります。本サイトの情報を利用したことにより生じた損害について、運営者は一切の責任を負いません。`;
 
 function About() {
   useEffect(() => { document.title = `サイトについて | ${SITE_NAME}`; window.scrollTo(0, 0); }, []);
