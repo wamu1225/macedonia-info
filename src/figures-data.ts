@@ -29,20 +29,20 @@ const PAD = 10;
 function px(lon: number): number { return +(PAD + (lon - LON0) * SX).toFixed(1); }
 function py(lat: number): number { return +(PAD + (LAT_TOP - lat) * SY).toFixed(1); }
 function baseMap(): string {
-  const seaLabel = (lon: number, lat: number, t: string, size = 8) =>
+  const seaLabel = (lon: number, lat: number, t: string, size = 12) =>
     `<text x="${px(lon)}" y="${py(lat)}" font-size="${size}" fill="#3c5560" text-anchor="middle" font-style="italic">${t}</text>`;
   // 方位（右上・北が上）
   const cx = MAP_W - 20, cy = 22;
   const compass =
     `<circle cx="${cx}" cy="${cy}" r="13" fill="${BG}" stroke="${INK}" stroke-width="1"/>` +
     `<path d="M${cx} ${cy - 11} l4 12 l-4 -3 l-4 3 Z" fill="${PORPHYRY}"/>` +
-    `<text x="${cx}" y="${cy - 12.5}" font-size="7.5" fill="${INK}" text-anchor="middle" font-weight="700">N</text>`;
+    `<text x="${cx}" y="${cy - 12.5}" font-size="10" fill="${INK}" text-anchor="middle" font-weight="700">N</text>`;
   return (
     // 海を全面に敷き、実海岸線に基づく陸地を羊皮紙色で重ねる
     `<rect width="${MAP_W}" height="${MAP_H}" fill="${SEA}"/>` +
     `<path d="${LAND_PATH}" fill="${BG}" stroke="${SEA_LINE}" stroke-width="0.6"/>` +
-    seaLabel(27, 34.3, '地中海') + seaLabel(34.5, 43, '黒海', 7.5) +
-    seaLabel(51, 27.2, 'ペルシア湾', 7) + seaLabel(50.5, 41.5, 'カスピ海', 7) + seaLabel(36.2, 22.5, '紅海', 7) +
+    seaLabel(27, 34.3, '地中海') + seaLabel(34.5, 43, '黒海', 12) +
+    seaLabel(51, 27.2, 'ペルシア湾', 12) + seaLabel(50.5, 41.5, 'カスピ海', 12) + seaLabel(36.2, 22.5, '紅海', 12) +
     compass
   );
 }
@@ -67,7 +67,7 @@ function phalanxSvg(): string {
     `<svg class="diagram-single" viewBox="0 0 300 170" width="100%" role="img" aria-label="長槍サリサを構えたマケドニアの密集隊形ファランクスの模式図">` +
     `<rect width="300" height="170" fill="${BG}"/>` +
     soldiers +
-    `<text x="150" y="162" font-size="10" fill="${DEEP}" text-anchor="middle" font-weight="700">後列の長槍も前方に届き、幾重もの槍ぶすまをつくる</text>` +
+    `<text x="150" y="162" font-size="11" fill="${DEEP}" text-anchor="middle" font-weight="700">後列の長槍も前方に届き、幾重もの槍ぶすまをつくる</text>` +
     `</svg>`
   );
 }
@@ -96,8 +96,8 @@ function campaignSvg(): string {
       marks += `<circle cx="${x}" cy="${y}" r="3.6" fill="${INK}"/>`;
     }
     const lx = x + p.ldx, ly = y + p.ldy;
-    marks += `<text x="${lx}" y="${ly}" font-size="9" fill="${INK}" text-anchor="${p.anchor}" font-weight="600" paint-order="stroke" stroke="${BG}" stroke-width="2.4">${p.label}</text>`;
-    if (p.year) marks += `<text x="${lx}" y="${p.ldy < 0 ? ly - 11 : ly + 11}" font-size="7.5" fill="${DEEP}" text-anchor="${p.anchor}" paint-order="stroke" stroke="${BG}" stroke-width="2.2">${p.year}</text>`;
+    marks += `<text x="${lx}" y="${ly}" font-size="12" fill="${INK}" text-anchor="${p.anchor}" font-weight="600" paint-order="stroke" stroke="${BG}" stroke-width="2.4">${p.label}</text>`;
+    if (p.year) marks += `<text x="${lx}" y="${p.ldy < 0 ? ly - 13 : ly + 13}" font-size="11" fill="${DEEP}" text-anchor="${p.anchor}" paint-order="stroke" stroke="${BG}" stroke-width="2.2">${p.year}</text>`;
   }
   return (
     `<svg class="diagram-single" viewBox="0 0 ${MAP_W} ${MAP_H}" width="100%" role="img" aria-label="アレクサンドロス大王の東方遠征の進軍路と四つの決戦（グラニコス・イッソス・ガウガメラ・ヒュダスペス）を、北を上にした地図上に示す">` +
@@ -106,9 +106,9 @@ function campaignSvg(): string {
     marks +
     // 凡例
     `<path d="M14 ${MAP_H - 10} l5 -5 l5 5 l-5 5 Z" fill="${PORPHYRY}" stroke="${GOLD}" stroke-width="1"/>` +
-    `<text x="26" y="${MAP_H - 7} " font-size="8" fill="${INK}">決戦</text>` +
-    `<circle cx="66" cy="${MAP_H - 10}" r="3.4" fill="${INK}"/>` +
-    `<text x="74" y="${MAP_H - 7}" font-size="8" fill="${INK}">おもな都市</text>` +
+    `<text x="26" y="${MAP_H - 7} " font-size="12" fill="${INK}">決戦</text>` +
+    `<circle cx="76" cy="${MAP_H - 10}" r="3.4" fill="${INK}"/>` +
+    `<text x="84" y="${MAP_H - 7}" font-size="12" fill="${INK}">おもな都市</text>` +
     `<text x="${MAP_W - 6}" y="${MAP_H - 6}" font-size="7" fill="${DEEP}" text-anchor="end" font-style="italic">地図データ: Natural Earth</text>` +
     `</svg>`
   );
@@ -130,21 +130,20 @@ function kingdomsSvg(): string {
     shapes += `<polygon points="${poly}" fill="${r.color}" fill-opacity="0.5" clip-path="url(#hk-land)"/>`;
   }
   for (const r of regions) {
-    shapes += `<text x="${px(r.llon)}" y="${py(r.llat)}" font-size="10" fill="${INK}" text-anchor="${r.anchor}" font-weight="700" paint-order="stroke" stroke="${BG}" stroke-width="2.8">${r.terr}</text>`;
+    shapes += `<text x="${px(r.llon)}" y="${py(r.llat)}" font-size="12" fill="${INK}" text-anchor="${r.anchor}" font-weight="700" paint-order="stroke" stroke="${BG}" stroke-width="2.8">${r.terr}</text>`;
   }
   const legend: { color: string; name: string }[] = [
     { color: PORPHYRY, name: 'アンティゴノス朝' },
     { color: GOLD, name: 'プトレマイオス朝' },
     { color: OLIVE, name: 'セレウコス朝' },
   ];
-  let leg = '';
-  let lx = 12;
-  const ly = MAP_H - 6;
-  for (const item of legend) {
-    leg += `<rect x="${lx}" y="${ly - 7}" width="9" height="9" rx="1.5" fill="${item.color}" fill-opacity="0.5" stroke="${item.color}" stroke-width="1.2"/>`;
-    leg += `<text x="${lx + 13}" y="${ly + 1}" font-size="8.5" fill="${INK}">${item.name}</text>`;
-    lx += item.name.length * 9 + 26;
-  }
+  // 横並びだと3つで344幅を超えるため、縦積みの凡例ボックスにする
+  let leg = `<rect x="8" y="6" width="132" height="58" rx="4" fill="${BG}" fill-opacity="0.92" stroke="#b6a888" stroke-width="0.8"/>`;
+  legend.forEach((item, i) => {
+    const ry = 22 + i * 18;
+    leg += `<rect x="16" y="${ry - 9}" width="10" height="10" rx="1.5" fill="${item.color}" fill-opacity="0.5" stroke="${item.color}" stroke-width="1.2"/>`;
+    leg += `<text x="32" y="${ry}" font-size="11.5" fill="${INK}">${item.name}</text>`;
+  });
   return (
     `<svg class="diagram-single" viewBox="0 0 ${MAP_W} ${MAP_H + 12}" width="100%" role="img" aria-label="ディアドコイの争いののちに分かれたヘレニズム三王国（アンティゴノス朝・プトレマイオス朝・セレウコス朝）の勢力範囲を、北を上にした地図上に色分けして示す">` +
     clipDef +
@@ -171,7 +170,7 @@ function rulersSvg(): string {
   for (const [y0, y1, c, label, fill] of bands) {
     const x0 = tx(y0), x1 = tx(y1);
     band += `<rect x="${x0}" y="${BY}" width="${(x1 - x0).toFixed(1)}" height="${BH}" fill="${c}"/>`;
-    if (label) band += `<text x="${((x0 + x1) / 2).toFixed(1)}" y="${BY + BH / 2 + 3.5}" font-size="9.5" fill="${fill}" text-anchor="middle" font-weight="700">${label}</text>`;
+    if (label) band += `<text x="${((x0 + x1) / 2).toFixed(1)}" y="${BY + BH / 2 + 3.5}" font-size="12" fill="${fill}" text-anchor="middle" font-weight="700">${label}</text>`;
   }
   let div = '';
   for (const y of [-146, 1000, 1400, 1912]) div += `<line x1="${tx(y)}" y1="${BY - 4}" x2="${tx(y)}" y2="${BY + BH + 4}" stroke="${BG}" stroke-width="1.4"/>`;
@@ -179,22 +178,22 @@ function rulersSvg(): string {
   for (const [y, t] of [[-146, '前146'], [500, '500'], [1000, '1000'], [1500, '1500'], [1912, '1912']] as [number, string][]) {
     const x = tx(y);
     axis += `<line x1="${x}" y1="${BY + BH + 9}" x2="${x}" y2="${BY + BH + 17}" stroke="${STONE}" stroke-width="1"/>`;
-    axis += `<text x="${x}" y="${BY + BH + 29}" font-size="8" fill="#6b5a45" text-anchor="middle">${t}年</text>`;
+    axis += `<text x="${x}" y="${BY + BH + 30}" font-size="11" fill="#6b5a45" text-anchor="middle">${t}年</text>`;
   }
   const sx = tx(650);
   const slav =
     `<line x1="${sx}" y1="${BY - 20}" x2="${sx}" y2="${BY}" stroke="${DEEP}" stroke-width="1" stroke-dasharray="2 2"/>` +
     `<circle cx="${sx}" cy="${BY - 20}" r="2.6" fill="${DEEP}"/>` +
-    `<text x="${sx + 5}" y="${BY - 22}" font-size="8" fill="${DEEP}" font-weight="600" text-anchor="start" paint-order="stroke" stroke="${BG}" stroke-width="2.4">6〜7世紀 スラヴ人の定住</text>`;
+    `<text x="${sx + 5}" y="${BY - 22}" font-size="11" fill="${DEEP}" font-weight="600" text-anchor="start" paint-order="stroke" stroke="${BG}" stroke-width="2.4">6〜7世紀 スラヴ人の定住</text>`;
   const midMed = ((tx(1000) + tx(1400)) / 2).toFixed(1);
   const medLabel =
     `<line x1="${midMed}" y1="${BY + BH}" x2="${midMed}" y2="${BY + BH + 33}" stroke="${OLIVE}" stroke-width="0.8" stroke-dasharray="2 2"/>` +
-    `<text x="${midMed}" y="${BY + BH + 44}" font-size="8.5" fill="${OLIVE}" text-anchor="middle" font-weight="700">中世＝諸勢力の交替</text>`;
+    `<text x="${midMed}" y="${BY + BH + 46}" font-size="12" fill="${OLIVE}" text-anchor="middle" font-weight="700">中世＝諸勢力の交替</text>`;
   return (
-    `<svg class="diagram-single" viewBox="0 0 ${RW} ${RH}" width="100%" role="img" aria-label="マケドニアの地を治めた勢力の移り変わりを、帯の幅で各時代の長さを表した帯年表。ローマから東ローマ帝国（紀元前146年から約1000年ごろ）、中世の諸勢力の交替、オスマン帝国（およそ1400年から1912年まで約500年）の順に続く">` +
-    `<rect width="${RW}" height="${RH}" fill="${BG}"/>` +
-    `<text x="${RW / 2}" y="18" font-size="11" fill="${DEEP}" text-anchor="middle" font-weight="700">マケドニアの地を治めた勢力の移り変わり</text>` +
-    `<text x="${RW / 2}" y="31" font-size="8" fill="#6b5a45" text-anchor="middle">帯の幅は、その支配が続いたおよその長さを表す</text>` +
+    `<svg class="diagram-single" viewBox="0 0 ${RW} ${RH + 10}" width="100%" role="img" aria-label="マケドニアの地を治めた勢力の移り変わりを、帯の幅で各時代の長さを表した帯年表。ローマから東ローマ帝国（紀元前146年から約1000年ごろ）、中世の諸勢力の交替、オスマン帝国（およそ1400年から1912年まで約500年）の順に続く">` +
+    `<rect width="${RW}" height="${RH + 10}" fill="${BG}"/>` +
+    `<text x="${RW / 2}" y="18" font-size="12" fill="${DEEP}" text-anchor="middle" font-weight="700">マケドニアの地を治めた勢力の移り変わり</text>` +
+    `<text x="${RW / 2}" y="33" font-size="11" fill="#6b5a45" text-anchor="middle">帯の幅は、その支配が続いたおよその長さを表す</text>` +
     slav + band + div + axis + medLabel +
     `</svg>`
   );
@@ -221,7 +220,7 @@ function verginaSvg(): string {
     `<line x1="8" y1="126" x2="292" y2="126" stroke="${INK}" stroke-width="1" opacity="0.35"/>` +
     // 後世の大墳丘（墓室を完全に覆う大きさ。これが未盗掘で残った理由）
     `<path d="M10 126 Q100 14 190 126 Z" fill="${STONE}"/>` +
-    `<text x="100" y="48" font-size="9" fill="${INK}" text-anchor="middle" opacity="0.8">後世に築かれた大墳丘</text>` +
+    `<text x="100" y="48" font-size="11" fill="${INK}" text-anchor="middle" opacity="0.8">後世に築かれた大墳丘</text>` +
     // 玄室（墳丘の内側に完全に収まる）
     `<rect x="70" y="94" width="60" height="32" fill="${DEEP}"/>` +
     // 羨道（玄室から右へ。墳丘の内側で止める）
@@ -232,11 +231,11 @@ function verginaSvg(): string {
     // 納骨箱（ラルナクス）＝本体＋蓋の段
     `<rect x="88" y="108" width="24" height="13" rx="1.5" fill="${GOLD}" stroke="${DEEP}" stroke-width="1"/>` +
     `<rect x="86" y="103" width="28" height="6" rx="1.5" fill="${GOLD}" stroke="${DEEP}" stroke-width="1"/>` +
-    `<text x="100" y="146" font-size="9" fill="${INK}" text-anchor="middle">王墓と黄金の納骨箱</text>` +
+    `<text x="100" y="146" font-size="11" fill="${INK}" text-anchor="middle">王墓と黄金の納骨箱</text>` +
     // 星（納骨箱の蓋の意匠）
     star +
     `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${GOLD_SOFT}" stroke="${DEEP}" stroke-width="1"/>` +
-    `<text x="${cx}" y="146" font-size="9" fill="${INK}" text-anchor="middle">十六条の星（蓋の意匠）</text>` +
+    `<text x="${cx}" y="146" font-size="11" fill="${INK}" text-anchor="middle">十六条の星（蓋の意匠）</text>` +
     `</svg>`
   );
 }
@@ -250,7 +249,7 @@ function balkansSvg(): string {
   const by = (lat: number) => +(BPAD + (BLAT_TOP - lat) * BSY).toFixed(1);
   const STONE_L = '#e7dcc4', STONE_B = '#b6a888';
   const lbl = (lon: number, lat: number, t: string, o: { s?: number; f?: string; a?: string; w?: number; halo?: string } = {}) =>
-    `<text x="${bx(lon)}" y="${by(lat)}" font-size="${o.s || 10}" fill="${o.f || INK}" text-anchor="${o.a || 'middle'}" font-weight="${o.w || 600}" paint-order="stroke" stroke="${o.halo || BG}" stroke-width="2.6">${t}</text>`;
+    `<text x="${bx(lon)}" y="${by(lat)}" font-size="${o.s || 12}" fill="${o.f || INK}" text-anchor="${o.a || 'middle'}" font-weight="${o.w || 600}" paint-order="stroke" stroke="${o.halo || BG}" stroke-width="2.6">${t}</text>`;
   const neighbors = ['srb', 'kos', 'bgr', 'grc', 'alb'];
   const cx = W - 20, cy = 22;
   return (
@@ -259,17 +258,17 @@ function balkansSvg(): string {
     `<path d="${land}" fill="${BG}" stroke="${STONE_B}" stroke-width="0.5"/>` +
     neighbors.map((k) => `<path d="${out[k]}" fill="${STONE_L}" stroke="${STONE_B}" stroke-width="0.8"/>`).join('') +
     `<path d="${out.nmk}" fill="${PORPHYRY}" fill-opacity="0.62" stroke="${DEEP}" stroke-width="1.3"/>` +
-    lbl(21.0, 43.5, 'セルビア') + lbl(20.6, 42.55, 'コソボ', { s: 8 }) + lbl(23.6, 42.2, 'ブルガリア') +
-    lbl(22.3, 40.15, 'ギリシャ') + lbl(19.85, 40.72, 'アルバニア', { s: 9 }) +
-    lbl(21.75, 41.35, '北マケドニア', { f: '#fff', w: 700, s: 11, halo: DEEP }) +
+    lbl(21.0, 43.5, 'セルビア') + lbl(20.6, 42.55, 'コソボ', { s: 11 }) + lbl(23.6, 42.2, 'ブルガリア') +
+    lbl(22.3, 40.15, 'ギリシャ') + lbl(19.85, 40.72, 'アルバニア', { s: 11 }) +
+    lbl(21.75, 41.35, '北マケドニア', { f: '#fff', w: 700, s: 13, halo: DEEP }) +
     `<circle cx="${bx(21.43)}" cy="${by(42.0)}" r="3.4" fill="${GOLD}" stroke="#fff" stroke-width="1"/>` +
-    lbl(21.52, 42.07, 'スコピエ', { a: 'start', s: 8.5, f: '#fff', halo: DEEP }) +
+    lbl(21.52, 42.07, 'スコピエ', { a: 'start', s: 11, f: '#fff', halo: DEEP }) +
     `<circle cx="${bx(20.72)}" cy="${by(41.05)}" r="3" fill="${SEA}" stroke="#3c5560" stroke-width="0.9"/>` +
-    lbl(20.55, 41.0, 'オフリド湖', { a: 'end', s: 8 }) +
+    lbl(20.55, 41.0, 'オフリド湖', { a: 'end', s: 11 }) +
     // 方位
     `<circle cx="${cx}" cy="${cy}" r="13" fill="${BG}" stroke="${INK}" stroke-width="1"/>` +
     `<path d="M${cx} ${cy - 11} l4 12 l-4 -3 l-4 3 Z" fill="${PORPHYRY}"/>` +
-    `<text x="${cx}" y="${cy - 12.5}" font-size="7.5" fill="${INK}" text-anchor="middle" font-weight="700">N</text>` +
+    `<text x="${cx}" y="${cy - 12.5}" font-size="10" fill="${INK}" text-anchor="middle" font-weight="700">N</text>` +
     `<text x="${W - 6}" y="${H - 6}" font-size="7" fill="${DEEP}" text-anchor="end" font-style="italic">地図データ: Natural Earth</text>` +
     `</svg>`
   );
@@ -284,7 +283,7 @@ function greeceSvg(): string {
   const STONE_B = '#b6a888', SEA_INK = '#3c5560', EARTH = '#6b5a45';
   type O = { s?: number; f?: string; a?: string; w?: number; halo?: string; dx?: number; dy?: number; i?: boolean };
   const lbl = (lon: number, lat: number, t: string, o: O = {}) =>
-    `<text x="${gx(lon) + (o.dx || 0)}" y="${gy(lat) + (o.dy || 0)}" font-size="${o.s || 10}" fill="${o.f || INK}" text-anchor="${o.a || 'middle'}" font-weight="${o.w || 600}" paint-order="stroke" stroke="${o.halo || BG}" stroke-width="2.6"${o.i ? ' font-style="italic"' : ''}>${t}</text>`;
+    `<text x="${gx(lon) + (o.dx || 0)}" y="${gy(lat) + (o.dy || 0)}" font-size="${o.s || 12}" fill="${o.f || INK}" text-anchor="${o.a || 'middle'}" font-weight="${o.w || 600}" paint-order="stroke" stroke="${o.halo || BG}" stroke-width="2.6"${o.i ? ' font-style="italic"' : ''}>${t}</text>`;
   const dot = (lon: number, lat: number, r: number, fill: string) =>
     `<circle cx="${gx(lon)}" cy="${gy(lat)}" r="${r}" fill="${fill}" stroke="#fff" stroke-width="1"/>`;
   // 王家の都と南部のおもなポリス（座標は実地点）
@@ -304,26 +303,26 @@ function greeceSvg(): string {
     `<svg class="diagram-single" viewBox="0 0 ${GW} ${GH}" width="100%" role="img" aria-label="マケドニア王国の都ペラ・アイガイと、南部ギリシャのポリス（アテナイ・テーバイ・コリントス・アルゴス・スパルタ・オリュンピア）の位置を、北を上にした地図で示す">` +
     `<rect width="${GW}" height="${GH}" fill="${SEA}"/>` +
     `<path d="${GREECE_LAND}" fill="${BG}" stroke="${STONE_B}" stroke-width="0.6"/>` +
-    lbl(25.4, 38.9, 'エーゲ海', { f: SEA_INK, halo: SEA, i: true, w: 500 }) +
-    lbl(19.95, 38.2, 'イオニア海', { f: SEA_INK, halo: SEA, i: true, w: 500, s: 9 }) +
-    lbl(23.25, 35.35, '地中海', { f: SEA_INK, halo: SEA, i: true, w: 500, s: 9 }) +
-    lbl(21.6, 41.1, 'マケドニア', { s: 11, f: DEEP, w: 700 }) +
-    lbl(21.9, 39.6, 'テッサリア', { s: 9, f: EARTH }) +
-    lbl(21.95, 36.72, 'ペロポネソス半島', { s: 8.5, f: EARTH }) +
-    lbl(24.9, 35.25, 'クレタ島', { s: 8.5, f: EARTH }) +
-    royal.map(([lo, la, t, a, dx, dy]) => dot(lo, la, 4, PORPHYRY) + lbl(lo, la, t, { a, dx, dy, s: 10, w: 700, f: DEEP })).join('') +
-    poleis.map(([lo, la, t, a, dx, dy]) => dot(lo, la, 3.2, GOLD) + lbl(lo, la, t, { a, dx, dy, s: 9.5 })).join('') +
+    lbl(25.4, 38.9, 'エーゲ海', { f: SEA_INK, halo: SEA, i: true, w: 500, s: 12 }) +
+    lbl(19.95, 38.2, 'イオニア海', { f: SEA_INK, halo: SEA, i: true, w: 500, s: 12 }) +
+    lbl(23.25, 35.35, '地中海', { f: SEA_INK, halo: SEA, i: true, w: 500, s: 12 }) +
+    lbl(21.6, 41.1, 'マケドニア', { s: 13, f: DEEP, w: 700 }) +
+    lbl(21.9, 39.6, 'テッサリア', { s: 12, f: EARTH }) +
+    lbl(21.95, 36.72, 'ペロポネソス半島', { s: 12, f: EARTH }) +
+    lbl(24.9, 35.25, 'クレタ島', { s: 12, f: EARTH }) +
+    royal.map(([lo, la, t, a, dx, dy]) => dot(lo, la, 4, PORPHYRY) + lbl(lo, la, t, { a, dx, dy, s: 12, w: 700, f: DEEP })).join('') +
+    poleis.map(([lo, la, t, a, dx, dy]) => dot(lo, la, 3.2, GOLD) + lbl(lo, la, t, { a, dx, dy, s: 12 })).join('') +
     // 方位
     `<circle cx="${GW - 20}" cy="22" r="13" fill="${BG}" stroke="${INK}" stroke-width="1"/>` +
     `<path d="M${GW - 20} 11 l4 12 l-4 -3 l-4 3 Z" fill="${PORPHYRY}"/>` +
-    `<text x="${GW - 20}" y="9.5" font-size="7.5" fill="${INK}" text-anchor="middle" font-weight="700">N</text>` +
+    `<text x="${GW - 20}" y="9.5" font-size="10" fill="${INK}" text-anchor="middle" font-weight="700">N</text>` +
     // 凡例
-    `<g transform="translate(10,${GH - 44})">` +
-    `<rect x="0" y="0" width="118" height="34" rx="3" fill="${BG}" fill-opacity="0.92" stroke="${STONE_B}" stroke-width="0.7"/>` +
-    `<circle cx="11" cy="11" r="4" fill="${PORPHYRY}" stroke="#fff" stroke-width="1"/>` +
-    `<text x="21" y="14" font-size="8.5" fill="${INK}">マケドニア王家の都</text>` +
-    `<circle cx="11" cy="25" r="3.2" fill="${GOLD}" stroke="#fff" stroke-width="1"/>` +
-    `<text x="21" y="28" font-size="8.5" fill="${INK}">南部のおもなポリス</text></g>` +
+    `<g transform="translate(10,${GH - 50})">` +
+    `<rect x="0" y="0" width="150" height="40" rx="3" fill="${BG}" fill-opacity="0.92" stroke="${STONE_B}" stroke-width="0.7"/>` +
+    `<circle cx="12" cy="13" r="4" fill="${PORPHYRY}" stroke="#fff" stroke-width="1"/>` +
+    `<text x="23" y="17" font-size="12" fill="${INK}">マケドニア王家の都</text>` +
+    `<circle cx="12" cy="29" r="3.2" fill="${GOLD}" stroke="#fff" stroke-width="1"/>` +
+    `<text x="23" y="33" font-size="12" fill="${INK}">南部のおもなポリス</text></g>` +
     `<text x="${GW - 6}" y="${GH - 6}" font-size="7" fill="${DEEP}" text-anchor="end" font-style="italic">地図データ: Natural Earth</text>` +
     `</svg>`
   );
