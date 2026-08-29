@@ -97,7 +97,7 @@ function campaignSvg(): string {
     }
     const lx = x + p.ldx, ly = y + p.ldy;
     marks += `<text x="${lx}" y="${ly}" font-size="12" fill="${INK}" text-anchor="${p.anchor}" font-weight="600" paint-order="stroke" stroke="${BG}" stroke-width="2.4">${p.label}</text>`;
-    if (p.year) marks += `<text x="${lx}" y="${p.ldy < 0 ? ly - 13 : ly + 13}" font-size="11" fill="${DEEP}" text-anchor="${p.anchor}" paint-order="stroke" stroke="${BG}" stroke-width="2.2">${p.year}</text>`;
+    if (p.year) marks += `<text x="${lx}" y="${p.ldy < 0 ? ly - 13 : ly + 13}" font-size="12" fill="${DEEP}" text-anchor="${p.anchor}" paint-order="stroke" stroke="${BG}" stroke-width="2.2">${p.year}</text>`;
   }
   return (
     `<svg class="diagram-single" viewBox="0 0 ${MAP_W} ${MAP_H}" width="100%" role="img" aria-label="アレクサンドロス大王の東方遠征の進軍路と四つの決戦（グラニコス・イッソス・ガウガメラ・ヒュダスペス）を、北を上にした地図上に示す">` +
@@ -178,13 +178,13 @@ function rulersSvg(): string {
   for (const [y, t] of [[-146, '前146'], [500, '500'], [1000, '1000'], [1500, '1500'], [1912, '1912']] as [number, string][]) {
     const x = tx(y);
     axis += `<line x1="${x}" y1="${BY + BH + 9}" x2="${x}" y2="${BY + BH + 17}" stroke="${STONE}" stroke-width="1"/>`;
-    axis += `<text x="${x}" y="${BY + BH + 30}" font-size="11" fill="#6b5a45" text-anchor="middle">${t}年</text>`;
+    axis += `<text x="${x}" y="${BY + BH + 30}" font-size="12" fill="#6b5a45" text-anchor="middle">${t}年</text>`;
   }
   const sx = tx(650);
   const slav =
     `<line x1="${sx}" y1="${BY - 20}" x2="${sx}" y2="${BY}" stroke="${DEEP}" stroke-width="1" stroke-dasharray="2 2"/>` +
     `<circle cx="${sx}" cy="${BY - 20}" r="2.6" fill="${DEEP}"/>` +
-    `<text x="${sx + 5}" y="${BY - 22}" font-size="11" fill="${DEEP}" font-weight="600" text-anchor="start" paint-order="stroke" stroke="${BG}" stroke-width="2.4">6〜7世紀 スラヴ人の定住</text>`;
+    `<text x="${sx + 5}" y="${BY - 22}" font-size="12" fill="${DEEP}" font-weight="600" text-anchor="start" paint-order="stroke" stroke="${BG}" stroke-width="2.4">6〜7世紀 スラヴ人の定住</text>`;
   const midMed = ((tx(1000) + tx(1400)) / 2).toFixed(1);
   const medLabel =
     `<line x1="${midMed}" y1="${BY + BH}" x2="${midMed}" y2="${BY + BH + 33}" stroke="${OLIVE}" stroke-width="0.8" stroke-dasharray="2 2"/>` +
@@ -193,7 +193,7 @@ function rulersSvg(): string {
     `<svg class="diagram-single" viewBox="0 0 ${RW} ${RH + 10}" width="100%" role="img" aria-label="マケドニアの地を治めた勢力の移り変わりを、帯の幅で各時代の長さを表した帯年表。ローマから東ローマ帝国（紀元前146年から約1000年ごろ）、中世の諸勢力の交替、オスマン帝国（およそ1400年から1912年まで約500年）の順に続く">` +
     `<rect width="${RW}" height="${RH + 10}" fill="${BG}"/>` +
     `<text x="${RW / 2}" y="18" font-size="12" fill="${DEEP}" text-anchor="middle" font-weight="700">マケドニアの地を治めた勢力の移り変わり</text>` +
-    `<text x="${RW / 2}" y="33" font-size="11" fill="#6b5a45" text-anchor="middle">帯の幅は、その支配が続いたおよその長さを表す</text>` +
+    `<text x="${RW / 2}" y="33" font-size="12" fill="#6b5a45" text-anchor="middle">帯の幅は、その支配が続いたおよその長さを表す</text>` +
     slav + band + div + axis + medLabel +
     `</svg>`
   );
