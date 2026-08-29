@@ -157,10 +157,10 @@ function kingdomsSvg(): string {
 
 // 7) 支配勢力の移り変わりの帯年表（時間の長さを帯の幅で示す・地図ではない概念図）
 function rulersSvg(): string {
-  const RW = 344, RH = 150, RPAD = 16;
+  const RW = 344, RH = 178, RPAD = 16;
   const YMIN = -150, YMAX = 1920;
   const tx = (y: number) => +(RPAD + ((y - YMIN) / (YMAX - YMIN)) * (RW - 2 * RPAD)).toFixed(1);
-  const BY = 60, BH = 32;
+  const BY = 80, BH = 32;
   const bands: [number, number, string, string, string][] = [
     [-146, 1000, STONE, 'ローマ／東ローマ帝国', INK],
     [1000, 1400, OLIVE, '', '#fff'],
@@ -182,18 +182,18 @@ function rulersSvg(): string {
   }
   const sx = tx(650);
   const slav =
-    `<line x1="${sx}" y1="${BY - 20}" x2="${sx}" y2="${BY}" stroke="${DEEP}" stroke-width="1" stroke-dasharray="2 2"/>` +
-    `<circle cx="${sx}" cy="${BY - 20}" r="2.6" fill="${DEEP}"/>` +
-    `<text x="${sx + 5}" y="${BY - 22}" font-size="12" fill="${DEEP}" font-weight="600" text-anchor="start" paint-order="stroke" stroke="${BG}" stroke-width="2.4">6〜7世紀 スラヴ人の定住</text>`;
+    `<line x1="${sx}" y1="${BY - 24}" x2="${sx}" y2="${BY}" stroke="${DEEP}" stroke-width="1" stroke-dasharray="2 2"/>` +
+    `<circle cx="${sx}" cy="${BY - 24}" r="2.6" fill="${DEEP}"/>` +
+    `<text x="${sx + 5}" y="${BY - 26}" font-size="12" fill="${DEEP}" font-weight="600" text-anchor="start" paint-order="stroke" stroke="${BG}" stroke-width="2.4">6〜7世紀 スラヴ人の定住</text>`;
   const midMed = ((tx(1000) + tx(1400)) / 2).toFixed(1);
   const medLabel =
     `<line x1="${midMed}" y1="${BY + BH}" x2="${midMed}" y2="${BY + BH + 33}" stroke="${OLIVE}" stroke-width="0.8" stroke-dasharray="2 2"/>` +
-    `<text x="${midMed}" y="${BY + BH + 46}" font-size="12" fill="${OLIVE}" text-anchor="middle" font-weight="700">中世＝諸勢力の交替</text>`;
+    `<text x="${midMed}" y="${BY + BH + 47}" font-size="12" fill="${OLIVE}" text-anchor="middle" font-weight="700">中世＝諸勢力の交替</text>`;
   return (
-    `<svg class="diagram-single" viewBox="0 0 ${RW} ${RH + 10}" width="100%" role="img" aria-label="マケドニアの地を治めた勢力の移り変わりを、帯の幅で各時代の長さを表した帯年表。ローマから東ローマ帝国（紀元前146年から約1000年ごろ）、中世の諸勢力の交替、オスマン帝国（およそ1400年から1912年まで約500年）の順に続く">` +
-    `<rect width="${RW}" height="${RH + 10}" fill="${BG}"/>` +
-    `<text x="${RW / 2}" y="18" font-size="12" fill="${DEEP}" text-anchor="middle" font-weight="700">マケドニアの地を治めた勢力の移り変わり</text>` +
-    `<text x="${RW / 2}" y="33" font-size="12" fill="#6b5a45" text-anchor="middle">帯の幅は、その支配が続いたおよその長さを表す</text>` +
+    `<svg class="diagram-single" viewBox="0 0 ${RW} ${RH}" width="100%" role="img" aria-label="マケドニアの地を治めた勢力の移り変わりを、帯の幅で各時代の長さを表した帯年表。ローマから東ローマ帝国（紀元前146年から約1000年ごろ）、中世の諸勢力の交替、オスマン帝国（およそ1400年から1912年まで約500年）の順に続く">` +
+    `<rect width="${RW}" height="${RH}" fill="${BG}"/>` +
+    `<text x="${RW / 2}" y="17" font-size="12" fill="${DEEP}" text-anchor="middle" font-weight="700">マケドニアの地を治めた勢力の移り変わり</text>` +
+    `<text x="${RW / 2}" y="34" font-size="12" fill="#6b5a45" text-anchor="middle">帯の幅は、その支配が続いたおよその長さを表す</text>` +
     slav + band + div + axis + medLabel +
     `</svg>`
   );
