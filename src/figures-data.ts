@@ -36,7 +36,7 @@ function baseMap(): string {
   const compass =
     `<circle cx="${cx}" cy="${cy}" r="13" fill="${BG}" stroke="${INK}" stroke-width="1"/>` +
     `<path d="M${cx} ${cy - 11} l4 12 l-4 -3 l-4 3 Z" fill="${PORPHYRY}"/>` +
-    `<text x="${cx}" y="${cy - 12.5}" font-size="10" fill="${INK}" text-anchor="middle" font-weight="700">N</text>`;
+    `<text x="${cx}" y="${cy - 12.5}" font-size="12" fill="${INK}" text-anchor="middle" font-weight="700">N</text>`;
   return (
     // 海を全面に敷き、実海岸線に基づく陸地を羊皮紙色で重ねる
     `<rect width="${MAP_W}" height="${MAP_H}" fill="${SEA}"/>` +
@@ -67,7 +67,7 @@ function phalanxSvg(): string {
     `<svg class="diagram-single" viewBox="0 0 300 170" width="100%" role="img" aria-label="長槍サリサを構えたマケドニアの密集隊形ファランクスの模式図">` +
     `<rect width="300" height="170" fill="${BG}"/>` +
     soldiers +
-    `<text x="150" y="162" font-size="11" fill="${DEEP}" text-anchor="middle" font-weight="700">後列の長槍も前方に届き、幾重もの槍ぶすまをつくる</text>` +
+    `<text x="150" y="162" font-size="12" fill="${DEEP}" text-anchor="middle" font-weight="700">後列の長槍も前方に届き、幾重もの槍ぶすまをつくる</text>` +
     `</svg>`
   );
 }
@@ -220,7 +220,7 @@ function verginaSvg(): string {
     `<line x1="8" y1="126" x2="292" y2="126" stroke="${INK}" stroke-width="1" opacity="0.35"/>` +
     // 後世の大墳丘（墓室を完全に覆う大きさ。これが未盗掘で残った理由）
     `<path d="M10 126 Q100 14 190 126 Z" fill="${STONE}"/>` +
-    `<text x="100" y="48" font-size="11" fill="${INK}" text-anchor="middle" opacity="0.8">後世に築かれた大墳丘</text>` +
+    `<text x="100" y="48" font-size="12" fill="${INK}" text-anchor="middle" opacity="0.8">後世に築かれた大墳丘</text>` +
     // 玄室（墳丘の内側に完全に収まる）
     `<rect x="70" y="94" width="60" height="32" fill="${DEEP}"/>` +
     // 羨道（玄室から右へ。墳丘の内側で止める）
@@ -231,11 +231,11 @@ function verginaSvg(): string {
     // 納骨箱（ラルナクス）＝本体＋蓋の段
     `<rect x="88" y="108" width="24" height="13" rx="1.5" fill="${GOLD}" stroke="${DEEP}" stroke-width="1"/>` +
     `<rect x="86" y="103" width="28" height="6" rx="1.5" fill="${GOLD}" stroke="${DEEP}" stroke-width="1"/>` +
-    `<text x="100" y="146" font-size="11" fill="${INK}" text-anchor="middle">王墓と黄金の納骨箱</text>` +
+    `<text x="100" y="146" font-size="12" fill="${INK}" text-anchor="middle">王墓と黄金の納骨箱</text>` +
     // 星（納骨箱の蓋の意匠）
     star +
     `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${GOLD_SOFT}" stroke="${DEEP}" stroke-width="1"/>` +
-    `<text x="${cx}" y="146" font-size="11" fill="${INK}" text-anchor="middle">十六条の星（蓋の意匠）</text>` +
+    `<text x="${cx}" y="146" font-size="12" fill="${INK}" text-anchor="middle">十六条の星（蓋の意匠）</text>` +
     `</svg>`
   );
 }
@@ -268,7 +268,7 @@ function balkansSvg(): string {
     // 方位
     `<circle cx="${cx}" cy="${cy}" r="13" fill="${BG}" stroke="${INK}" stroke-width="1"/>` +
     `<path d="M${cx} ${cy - 11} l4 12 l-4 -3 l-4 3 Z" fill="${PORPHYRY}"/>` +
-    `<text x="${cx}" y="${cy - 12.5}" font-size="10" fill="${INK}" text-anchor="middle" font-weight="700">N</text>` +
+    `<text x="${cx}" y="${cy - 12.5}" font-size="12" fill="${INK}" text-anchor="middle" font-weight="700">N</text>` +
     `<text x="${W - 6}" y="${H - 6}" font-size="7" fill="${DEEP}" text-anchor="end" font-style="italic">地図データ: Natural Earth</text>` +
     `</svg>`
   );
@@ -315,7 +315,7 @@ function greeceSvg(): string {
     // 方位
     `<circle cx="${GW - 20}" cy="22" r="13" fill="${BG}" stroke="${INK}" stroke-width="1"/>` +
     `<path d="M${GW - 20} 11 l4 12 l-4 -3 l-4 3 Z" fill="${PORPHYRY}"/>` +
-    `<text x="${GW - 20}" y="9.5" font-size="10" fill="${INK}" text-anchor="middle" font-weight="700">N</text>` +
+    `<text x="${GW - 20}" y="9.5" font-size="12" fill="${INK}" text-anchor="middle" font-weight="700">N</text>` +
     // 凡例
     `<g transform="translate(10,${GH - 50})">` +
     `<rect x="0" y="0" width="150" height="40" rx="3" fill="${BG}" fill-opacity="0.92" stroke="${STONE_B}" stroke-width="0.7"/>` +
