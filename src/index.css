@@ -4,6 +4,7 @@
   --porphyry-deep: #5c1f1f;
   --porphyry-soft: #a85a4f;
   --gold: #b8912f;
+  --gold-text: #7d611c; /* 字に使うときの濃い色（コントラスト 4.5:1 以上・2026-11-07） */
   --gold-soft: #d0ad57;
   --parchment: #f4efe4;
   --paper-card: #fffdf8;
