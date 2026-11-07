@@ -328,6 +328,27 @@ function greeceSvg(): string {
   );
 }
 
+// 国名をめぐる歩み（1991〜2020）の縦の年表（modern の「プレスパ合意と改称」）
+function namingSvg(): string {
+  const rows: [string, string, string][] = [
+    ['1991年', '「マケドニア共和国」として独立を宣言', INK],
+    ['1995年', '暫定合意。国旗の星を使わないと決める', INK],
+    ['2018年', 'プレスパ合意に署名（6月17日）', PORPHYRY],
+    ['2019年', '合意が発効し「北マケドニア共和国」に', PORPHYRY],
+    ['2020年', 'NATO（北大西洋条約機構）に加盟', OLIVE],
+  ];
+  const rowH = 32, top = 20, W = 344;
+  const items = rows.map(([y, label, c], i) => {
+    const cy = top + i * rowH;
+    return `<circle cx="64" cy="${cy}" r="6" fill="${c}"/>` +
+      `<text x="52" y="${cy + 4}" font-size="13" font-weight="700" fill="${INK}" text-anchor="end">${y}</text>` +
+      `<text x="78" y="${cy + 4}" font-size="13" fill="${INK}">${label}</text>`;
+  }).join('');
+  const H = top + (rows.length - 1) * rowH + 20;
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="国名をめぐる歩み：1991年に独立を宣言、1995年の暫定合意、2018年のプレスパ合意の署名、2019年の発効と改称、2020年のNATO加盟">` +
+    `<line x1="64" y1="${top}" x2="64" y2="${top + (rows.length - 1) * rowH}" stroke="${STONE}" stroke-width="2"/>${items}</svg>`;
+}
+
 const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
   'phalanx': {
     caption: 'サリサとファランクスの模式図。長槍サリサ（約5.5から6メートル）を構えた兵が密集し、後列の槍も前方に届いて、幾重もの槍ぶすまをつくりました。図は仕組みを示すもので、隊列の人数や寸法は正確ではありません。',
@@ -352,6 +373,10 @@ const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
   'rulers': {
     caption: 'マケドニアの地を治めた勢力の移り変わりを示した帯年表（北が上ではなく、左から右へ時間が進む）。帯の幅は、その支配がおよそどれだけ続いたかを表します。ローマ帝国からその流れをくむ東ローマ（ビザンティン）帝国までが千年あまりを占め、6から7世紀にはスラヴ人の定住が進んだ。中世にはブルガリアやセルビアなどの勢力が入れ替わり、およそ1400年ごろから1912年まで、五百年ほどオスマン帝国の統治が続きました。年の区切りはおおよそのもの。',
     inner: `<div class="diagram-wrap">${rulersSvg()}</div>`,
+  },
+  'naming': {
+    caption: '独立から改称まで、およそ28年かかりました。',
+    inner: `<div class="diagram-wrap">${namingSvg()}</div>`,
   },
   'vergina': {
     caption: 'ヴェルギナの王墓の模式図。大きな墳丘の下に王墓が隠され、黄金の納骨箱（ラルナクス）が納められていました。蓋にはアルゲアス朝の象徴とされる星（太陽）の意匠が描かれていました。図は仕組みを示すもので、光線の数や寸法は正確ではありません。',
